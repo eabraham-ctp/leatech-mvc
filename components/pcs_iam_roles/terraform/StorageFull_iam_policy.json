@@ -1,0 +1,35 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "S3AllowGrant",
+      "Effect": "Allow",
+      "Action": [
+        "s3:*"
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
+      "Sid": "GlacierAllowGrant",
+      "Effect": "Allow",
+      "Action": [
+        "glacier:*"
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
+      "Sid": "CloudFrontAllowGrant",
+      "Effect": "Allow",
+      "Action": [
+        "cloudfront:*"
+      ],
+      "Resource": [
+        "*"
+      ]
+    }
+  ]
+}

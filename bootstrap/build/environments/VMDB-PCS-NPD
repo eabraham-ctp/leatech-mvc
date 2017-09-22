@@ -1,0 +1,67 @@
+# CIDR ranges
+
+# VPC CIDR block
+export VPC_CIDR='10.160.64.0/19'
+
+# edit the subnets blocks for each AZ:
+# SUBNET_NAME=”AZ1/Metric,AZ2/Metric,AZ2/Metric”
+export DMZ_SUBNETS="10.160.64.0/26,10.160.64.64/26,10.160.64.128/26"
+export SERVICES_SUBNETS="10.160.66.0/23,10.160.68.0/23,10.160.70.0/23"  
+export SECURITY_SUBNETS="10.160.72.0/23,10.160.74.0/23,10.160.76.0/23"  
+export DATA_SUBNETS="10.160.78.0/24,10.160.79.0/24,10.160.80.0/24"
+export WORKSTATIONS_SUBNETS="10.160.81.0/24,10.160.82.0/24,10.160.83.0/24"
+export TESTBUILDSINFRA_SUBNETS=""
+export TESTBUILDSAPP_SUBNETS=""
+export TESTBUILDSDATA_SUBNETS=""
+export REGION="eu-west-1"
+export TF_VAR_azs="[\"${REGION}a\",\"${REGION}b\",\"${REGION}c\"]"
+
+# Backend profile - The profile to be used as backend, i.e. for ANLTC use NPD/SBX, comment out if using the same account
+# export BACKEND_PROFILE="VMDB-PCS-NPD"
+
+# S3 bucket for initial backend
+export BACKEND_BUCKET="vmdb-pcs-npd-config"
+
+# Defines the which consul server to use
+export CONSUL_PROFILE="VMDB-PCS-NPD"
+
+# OpenVPN details
+export OPENVPN_EIP="34.253.167.142"
+export TF_VAR_openvpn_user='mvc'
+export TF_VAR_openvpn_password='KNIONnkm+@e29hd'
+
+
+# SSH cidr range IP list of net blocks allowed to ssh to instances optional and should be limited and superceded by security groups as the build progresses
+export TF_VAR_ssh_cidrs="[\"193.32.48.13/32\"]" #Example VPC cidr and VM VPN IP
+
+# Static routes to go back to VPN gateway until propagation is working [OPTIONAL]
+export TF_VAR_static_routes='193.32.48.13/32'
+# Manually created VPG added to route for propagation [OPTIONAL]
+export TF_VAR_external_gw_id='vgw-e36a5797'
+
+# If this environment is a peering accepter set the following to set your routes do not set these on new builds
+export TF_VAR_pss_vpc_cidr='10.160.128.0/18' # CIDR of remote VPC
+export TF_VAR_pss_vpc_peering_id="pcx-3682e35f" # PCS peering ID can be found in the ouputs from VPC peering module
+
+# components - control which component is deployed, set to TRUE or FALSE
+export DEPLOY_IAM_ROLES=TRUE
+export DEPLOY_VPC=TRUE
+export DEPLOY_SQUID=TRUE
+export DEPLOY_CONSUL=TRUE
+export DEPLOY_VAULT=TRUE
+export DEPLOY_VPC_PEERING=FALSE
+export DEPLOY_WORKSTATIONS=TRUE
+export DEPLOY_TREND=TRUE
+export DEPLOY_ROUTE53=TRUE
+export DEPLOY_CHEF=TRUE
+export DEPLOY_CW_METRICS=TRUE
+export DEPLOY_DEVOPS=TRUE
+
+# VMDB VPN endpoints
+# export TF_VAR_vpn_conn_config="[\"193.32.46.1|65000\"]" manually built in ANLTC
+
+# encrypted AMI
+export ENV_AMI_ID="ami-d30dfcaa" 
+
+export TF_VAR_kms_ami_key="arn:aws:kms:eu-west-1:160037550773:key/e965241f-14c2-4c68-bbdb-230469f31b82"
+export TF_VAR_kms_general_key="arn:aws:kms:eu-west-1:160037550773:key/07fcad9b-b92a-420e-9d81-278118043097"

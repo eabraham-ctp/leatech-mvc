@@ -1,0 +1,10 @@
+# Cloud Technology Partners, Inc. https://www.cloudtp.com
+#
+# CIS 3.x CloudWatch Metrics & Alarms
+
+
+terraform {
+  backend "consul" {
+    path = "aws/pcs/cloudwatchmetrics/tfstate"
+  }
+}

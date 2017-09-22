@@ -1,0 +1,27 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+
+platforms:
+  - name: ubuntu-16.04
+  - name: centos-7.3
+
+verifier: inspec
+
+suites:
+  - name: default
+    run_list:
+      - recipe[pcs_consul::default]
+    attributes:
+      sumologic:
+        accessid:  <%= ENV["SUMO_ACCESS_ID"] || "You need to export SUMO_ACCESS_ID in your local dev environment" %>
+        accesskey: <%= ENV["SUMO_ACCESS_KEY"] || "You need to export SUMO_ACCESS_ID in your local dev environment" %>
+      consul:
+        enable_webui: true
+        config:
+          datacenter: us-east-1
+          server: true
+          encrypt: tif3NuFR0Og2s5vAtkUYWw==

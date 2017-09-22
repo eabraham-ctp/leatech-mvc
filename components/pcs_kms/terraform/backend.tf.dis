@@ -1,0 +1,7 @@
+terraform {
+  backend "s3" {
+    bucket = "vmdb-pcs-npd-test-config"
+    key    = "VMDB-PCS-NPD/terraform/aws/pcs/kms/tfstate/terraform.tfstate"
+    region = "eu-west-1"
+  }
+}

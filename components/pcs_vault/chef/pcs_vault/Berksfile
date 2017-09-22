@@ -1,0 +1,8 @@
+source 'https://supermarket.chef.io'
+
+metadata 
+cookbook 'hashicorp-vault',  git: "https://github.com/johnbellone/vault-cookbook.git"
+cookbook 'consul'
+cookbook 'nssm' #TECHDEBT version pinning
+
+# cookbook 'sumologic_agent', '>= 0.1.0', path: '../sumologic_agent'

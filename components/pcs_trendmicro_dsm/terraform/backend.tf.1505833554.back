@@ -1,0 +1,10 @@
+# Cloud Technology Partners, Inc. https://www.cloudtp.com
+#
+# Platform Common Services
+# Trend Micro - bootstrap
+
+terraform {
+  backend "consul" {
+    path = "aws/pcs/trendmicro/tfstate"
+  }
+}

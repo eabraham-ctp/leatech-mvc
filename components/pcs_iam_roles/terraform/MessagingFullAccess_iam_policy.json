@@ -1,0 +1,48 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [{
+            "Sid": "AllowSNSSQS",
+            "Effect": "Allow",
+            "Action": [
+                "sns:*",
+                "sqs:*"
+            ],
+            "Resource": [
+                "*"
+            ],
+            "Condition": {
+                "ArnEquals": {
+                    "aws:SourceArn": [
+                        "arn:aws:*:*:557746599547:*",
+                        "arn:aws:*:*:160037550773:*"
+                    ]
+                }
+            }
+        },
+        {
+            "Effect": "Deny",
+            "Action": [
+                "sns:*",
+                "sqs:*",
+                "cloudformation:*",
+                "cloudtrail:*"
+            ],
+            "Resource": [
+                "arn:aws:sns:*:*:*TRM*",
+                "arn:aws:sqs:*:*:*TRM*",
+                "arn:aws:cloudformation:*:*:*TRM*",
+                "arn:aws:cloudtrail:*:*:*TRM*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "support:*",
+                "trustedadvisor:*",
+                "cloudformation:*",
+                "cloudtrail:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}

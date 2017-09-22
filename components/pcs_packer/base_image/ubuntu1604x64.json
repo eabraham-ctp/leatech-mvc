@@ -1,0 +1,70 @@
+{
+  "variables": {
+    "aws_region": "",
+    "instance_type": "",
+    "subnet_id": "",
+    "build_number": "",
+    "kms_key_id": "",
+    "vpc_id":""
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "instance_type": "{{user `instance_type`}}",
+      "subnet_id": "{{user `subnet_id`}}",
+      "vpc_id": "{{user `vpc_id`}}",
+      "region": "{{user `aws_region`}}",
+      "ami_name": "Ubuntu_1604_x64_v{{user `build_number`}}",
+      "ssh_username": "ubuntu",
+      "encrypt_boot": true,
+      "temporary_key_pair_name": "Packer_BuilderTemp_Ubuntu1604x64_v{{user `build_number`}}",
+      "kms_key_id": "{{user `kms_key_id`}}",
+      "associate_public_ip_address": true,
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "*ubuntu-xenial-16.04-amd64-server-*",
+          "root-device-type": "ebs"
+        },
+        "owners": [
+          "099720109477"
+        ],
+        "most_recent": true
+      },
+      "tags": {
+        "buildnumber": "{{user `build_number`}}",
+        "createdon": "{{timestamp}}",
+        "createdby": "Packer",
+        "os": "ubuntu1604x64",
+        "stage": "Complete"
+      },
+      "run_tags": {
+        "name": "Packer Imaging",
+        "buildnumber": "{{user `build_number`}}",
+        "createdon": "{{timestamp}}",
+        "createdby": "Packer",
+        "os": "ubuntu1604x64",
+        "stage": "Build"
+      },
+      "run_volume_tags": {
+        "name": "Packer Imaging",
+        "buildnumber": "{{user `build_number`}}",
+        "createdon": "{{timestamp}}",
+        "createdby": "Packer",
+        "os": "ubuntu1604x64",
+        "stage": "Build"
+      },
+      "ami_regions": [
+        "{{user `aws_region`}}"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=\"--force-confdef\" -o Dpkg::Options::=\"--force-confold\" upgrade"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+source 'https://supermarket.chef.io'
+
+metadata
+
+cookbook 'consul', '>= 2.3.0'
+cookbook 'build-essential'
+cookbook 'nssm' #TECHDEBT version pinning
+cookbook 'golang', '~> 1.7'
+
+
+# cookbook 'sumologic-collector', '~> 1.2.19'
+# cookbook 'sumologic_agent', '>= 0.1.0', path: '../sumologic_agent'

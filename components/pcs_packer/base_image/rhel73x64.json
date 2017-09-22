@@ -1,0 +1,77 @@
+{
+  "variables": {
+    "aws_region": "",
+    "instance_type": "",
+    "subnet_id": "",
+    "build_number": "",
+    "kms_key_id": "",
+    "vpc_id":"",
+    "proxy_host":"",
+    "proxy_port":"",
+    "install_script":"",
+    "ami_use":""
+  },
+  "builders": [
+    {
+      "type": "amazon-ebs",
+      "instance_type": "{{user `instance_type`}}",
+      "subnet_id": "{{user `subnet_id`}}",
+      "vpc_id": "{{user `vpc_id`}}",
+      "region": "{{user `aws_region`}}",
+      "ami_name": "RHEL_73_x64_v{{user `build_number`}}-{{user `ami_use`}}",
+      "ssh_username": "ec2-user",
+      "encrypt_boot": true,
+      "temporary_key_pair_name": "Packer_BuilderTemp_RHEL73x64_v{{user `build_number`}}",
+      "kms_key_id": "{{user `kms_key_id`}}",
+      "associate_public_ip_address": true,
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "RHEL-7.3_HVM-*-x86_64-*-GP2",
+          "root-device-type": "ebs"
+        },
+        "owners": [
+          "309956199498"
+        ],
+        "most_recent": true
+      },
+      "tags": {
+        "buildnumber": "{{user `build_number`}}",
+        "createdon": "{{timestamp}}",
+        "createdby": "Packer",
+        "os": "rhel73x64",
+        "stage": "Complete"
+      },
+      "run_tags": {
+        "name": "Packer Imaging",
+        "buildnumber": "{{user `build_number`}}",
+        "createdon": "{{timestamp}}",
+        "createdby": "Packer",
+        "os": "rhel73x64",
+        "stage": "Build"
+      },
+      "run_volume_tags": {
+        "name": "Packer Imaging",
+        "buildnumber": "{{user `build_number`}}",
+        "createdon": "{{timestamp}}",
+        "createdby": "Packer",
+        "os": "rhel73x64",
+        "stage": "Build"
+      },
+      "ami_regions": [
+        "{{user `aws_region`}}"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "/var/tmp/chef.rpm",
+      "destination": "/var/tmp/chef.rpm"
+    },
+    {
+      "type": "shell",
+      "script": "{{user `install_script`}}"
+    } 
+  ]
+}

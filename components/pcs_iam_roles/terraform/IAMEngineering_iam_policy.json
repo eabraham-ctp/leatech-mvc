@@ -1,0 +1,50 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+      "Effect": "Allow",
+      "Action": [
+        "iam:ChangePassword",
+        "iam:CreateAccessKey",
+        "iam:CreateSAMLProvider",
+        "iam:CreateVirtualMFADevice",
+        "iam:DeactivateMFADevice",
+        "iam:DeleteAccessKey",
+        "iam:DeleteVirtualMFADevice",
+        "iam:EnableMFADevice",
+        "iam:UpdateAccessKey",
+        "iam:UpdateSAMLProvider",
+        "iam:UpdateSSHPublicKey",
+        "iam:UpdateServerCertificate",
+        "iam:UpdateSigningCertificate",
+        "iam:UpdateUser",
+        "iam:UploadSSHPublicKey",
+        "iam:UploadServerCertificate",
+        "iam:UploadSigningCertificate",
+        "iam:Get*",
+        "iam:List*"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Deny",
+      "Action": [
+        "iam:CreateUser",
+        "iam:CreateRole",
+        "iam:CreatePolicy",
+        "iam:DeleteUser",
+        "iam:DeleteRole",
+        "iam:DeletePolicy"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Deny",
+      "Action": [
+        "cloudtrail:DeleteTrail",
+        "cloudtrail:StopLogging",
+        "cloudtrail:UpdateTrail"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
