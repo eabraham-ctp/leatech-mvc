@@ -1,0 +1,49 @@
+private_key.pem
+# Created by .ignore support plugin (hsz.mobi)
+/scripts/testxml.xml
+bootstrap/build/*.ovpn
+chefpub
+*.iml
+terraform.tfstate.d
+providers/aws/vpn/config.txt
+
+# Compiled files
+out
+.terraform/*
+.terraform.tfstate.d/*
+.terraform
+
+# IntelliJ project files
+*.tfstate.lock.info
+*.tfstate
+
+# Generated files
+.DS_Store
+gen
+*vault_init.txt
+
+# ignore backups
+logs/*
+bootstrap/build/environments/backup/*
+
+# Python virtual env
+apply*.log
+*.key
+public_key.pem
+*.key.pub
+terraform.tfvars
+env
+.idea
+chef_id_rsa
+*.tfstate.backup
+
+# Module directory
+setvars*.sh
+backend.tf.off
+backend.tf
+*.orig
+!setvars-example.sh
+*.back
+vault*.txt
+envSetup.sh
+
