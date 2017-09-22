@@ -351,8 +351,8 @@ if [[ $COMPONENTS == "all" ]]; then
 		echo "Assuming this is the first run, "
 		check_keypair
 		upload_private_keys_to_bucket
-		# create_general_kms
-		# terraform_apply_iam_roles
+		#create_general_kms
+		terraform_apply_iam_roles
 		vpc
 		create_base_ami 
 		terraform_apply_squid # Squid controls all outbound access and has no pre-requisites apart from and AMI and KMS

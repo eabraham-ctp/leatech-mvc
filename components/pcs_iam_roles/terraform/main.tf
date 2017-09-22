@@ -86,8 +86,8 @@ resource "aws_iam_policy" "TrendMicro" {
 data "template_file" "kms_readonly_policy_template" {
   template              = "${file("${path.module}/kms_readonly_policy.tpl")}"
   vars {
-    kms_ami_key       = "${data.terraform_remote_state.kms.pcs_ami_kms}",
-    kms_general_key   = "${data.terraform_remote_state.kms.pcs_general_kms}"
+    kms_ami_key       = "${var.kms_ami_key}",
+    kms_general_key   = "${var.kms_general_key}"
   }
 }
 

@@ -19,3 +19,12 @@ variable "default_tags" {
   description = "tags"
   type="map"
 }
+
+variable "kms_ami_key" {
+  description = "key for encrypting AMIs"
+}
+
+
+variable "kms_general_key" {
+  description = "key for encrypting general stuff"
+}

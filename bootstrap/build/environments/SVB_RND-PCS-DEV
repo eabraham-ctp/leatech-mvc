@@ -1,0 +1,70 @@
+#DEV based on SBX
+
+# CIDR ranges
+
+# VPC CIDR block
+export VPC_CIDR='10.160.0.0/18'
+
+# edit the subnets blocks for each AZ:
+# SUBNET_NAME=”AZ1/Metric,AZ2/Metric,AZ2/Metric”
+export DMZ_SUBNETS="10.160.0.0/26,10.160.0.64/26,10.160.0.128/26"
+export SERVICES_SUBNETS="10.160.2.0/23,10.160.4.0/23,10.160.6.0/23"  
+export SECURITY_SUBNETS=""  
+export DATA_SUBNETS="10.160.14.0/24,10.160.15.0/24,10.160.16.0/24"
+export WORKSTATIONS_SUBNETS=""
+export TESTBUILDSINFRA_SUBNETS=""
+export TESTBUILDSAPP_SUBNETS=""
+export TESTBUILDSDATA_SUBNETS=""
+export REGION="us-west-2"
+export TF_VAR_azs="[\"${REGION}a\",\"${REGION}b\",\"${REGION}c\"]"
+
+# Backend profile - The profile to be used as backend, i.e. for use NPD/DEV, comment out if using the same account
+# export BACKEND_PROFILE="SVB_RND-PCS-DEV"
+
+# S3 bucket for initial backend
+export BACKEND_BUCKET="svb-rnd-pcs-dev-config"
+
+# Defines the which consul server to use
+export CONSUL_PROFILE="SVB_RND-PCS-DEV"
+
+# EIP is manually allocated
+export OPENVPN_EIP="34.214.177.58"
+export TF_VAR_openvpn_password='62+mBF3qsJxp*2?4'
+
+# SSH cidr range IP list of net blocks allowed to ssh to instances optional and should be limited and superceded by security groups as the build progresses
+export TF_VAR_ssh_cidrs="[\"$VPC_CIDR\"]" #Example VPC cidr and VM VPN IP
+
+# components - control which component is deployed, set to TRUE or FALSE
+export DEPLOY_IAM_ROLES=TRUE
+export DEPLOY_VPC=TRUE
+export DEPLOY_ROUTE53=TRUE
+export DEPLOY_SQUID=TRUE
+export DEPLOY_CONSUL=TRUE
+export DEPLOY_VAULT=TRUE
+export DEPLOY_VPC_PEERING=FALSE
+export DEPLOY_WORKSTATIONS=TRUE
+export DEPLOY_CHEF=TRUE
+export DEPLOY_TREND=FALSE
+export DEPLOY_CW_METRICS=TRUE
+
+export TF_VAR_openvpn_ami="ami-fe485b87" # You need to of subscribed to the AMI in the marketplace
+# make sure you accept the license agreement and then kill the instance it automatically launches
+# for you
+
+export APPLICATIONNAME="SVB Platform Common Services"
+export TECHNICALRESOURCE="DEVOPS"
+export BUSINESSOWNER="jeff.dickman@cloudtp.com"
+
+export TF_VAR_kms_ami_key="arn:aws:kms:us-west-2:754635990979:key/aeb779cc-897e-4e46-bd4a-aa1f6345a3ae"
+export TF_VAR_kms_general_key="arn:aws:kms:us-west-2:754635990979:key/2e7431bb-3078-43b5-95c5-4ba6471d5baf"
+
+# TEMPORARY for chef
+
+export TF_VAR_instance_type=t2.medium
+export TF_VAR_chef_name=chef
+
+# Trend
+#export TF_VAR_tm_ami_id="ami-3e5ebc47"  #you need to be subscribed to the AMI in the marketplace
+
+export ENV_AMI_ID="ami-a847bbd0" 
+export ENV_AMI_ID="ami-ac47bbd4" 
