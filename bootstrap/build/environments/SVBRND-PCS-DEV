@@ -19,13 +19,13 @@ export REGION="us-west-2"
 export TF_VAR_azs="[\"${REGION}a\",\"${REGION}b\",\"${REGION}c\"]"
 
 # Backend profile - The profile to be used as backend, i.e. for use NPD/DEV, comment out if using the same account
-# export BACKEND_PROFILE="SVB_RND-PCS-DEV"
+# export BACKEND_PROFILE="SVBRND-PCS-DEV"
 
 # S3 bucket for initial backend
-export BACKEND_BUCKET="svb-rnd-pcs-dev-config"
+export BACKEND_BUCKET="svbrnd-pcs-dev-config"
 
 # Defines the which consul server to use
-export CONSUL_PROFILE="SVB_RND-PCS-DEV"
+export CONSUL_PROFILE="SVBRND-PCS-DEV"
 
 # EIP is manually allocated
 export OPENVPN_EIP="34.214.177.58"
@@ -55,8 +55,8 @@ export APPLICATIONNAME="SVB Platform Common Services"
 export TECHNICALRESOURCE="DEVOPS"
 export BUSINESSOWNER="jeff.dickman@cloudtp.com"
 
-export TF_VAR_kms_ami_key="arn:aws:kms:us-west-2:754635990979:key/aeb779cc-897e-4e46-bd4a-aa1f6345a3ae"
-export TF_VAR_kms_general_key="arn:aws:kms:us-west-2:754635990979:key/2e7431bb-3078-43b5-95c5-4ba6471d5baf"
+export TF_VAR_kms_ami_key="arn:aws:kms:us-west-2:754635990979:key/9dad86f2-c17f-4088-9903-ca6ad93d6e9a"
+export TF_VAR_kms_general_key="arn:aws:kms:us-west-2:754635990979:key/66250c2a-2833-4626-8dd8-49c08b14bc76"
 
 # TEMPORARY for chef
 
@@ -66,5 +66,6 @@ export TF_VAR_chef_name=chef
 # Trend
 #export TF_VAR_tm_ami_id="ami-3e5ebc47"  #you need to be subscribed to the AMI in the marketplace
 
-export ENV_AMI_ID="ami-a847bbd0" 
-export ENV_AMI_ID="ami-ac47bbd4" 
+export ENV_AMI_ID="ami-2cb54a54"
+
+export ENV_AMI_ID="failed" 

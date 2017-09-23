@@ -351,7 +351,7 @@ if [[ $COMPONENTS == "all" ]]; then
 		echo "Assuming this is the first run, "
 		check_keypair
 		upload_private_keys_to_bucket
-		#create_general_kms
+		create_general_kms
 		terraform_apply_iam_roles
 		vpc
 		create_base_ami 
