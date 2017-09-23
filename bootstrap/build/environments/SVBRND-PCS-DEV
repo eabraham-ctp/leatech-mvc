@@ -9,7 +9,7 @@ export VPC_CIDR='10.160.0.0/18'
 # SUBNET_NAME=”AZ1/Metric,AZ2/Metric,AZ2/Metric”
 export DMZ_SUBNETS="10.160.0.0/26,10.160.0.64/26,10.160.0.128/26"
 export SERVICES_SUBNETS="10.160.2.0/23,10.160.4.0/23,10.160.6.0/23"  
-export SECURITY_SUBNETS=""  
+export SECURITY_SUBNETS="10.160.10.0/24,10.160.11.0/24,10.160.12.0/24"  
 export DATA_SUBNETS="10.160.14.0/24,10.160.15.0/24,10.160.16.0/24"
 export WORKSTATIONS_SUBNETS=""
 export TESTBUILDSINFRA_SUBNETS=""
@@ -67,5 +67,3 @@ export TF_VAR_chef_name=chef
 #export TF_VAR_tm_ami_id="ami-3e5ebc47"  #you need to be subscribed to the AMI in the marketplace
 
 export ENV_AMI_ID="ami-2cb54a54"
-
-export ENV_AMI_ID="failed" 
