@@ -3,11 +3,6 @@
 # export TF_VAR_os='ubuntu1604x64'
 export TF_VAR_os='rhel73x64'
 
-
-# Initial credentials for logging into OpenVPN
-export TF_VAR_openvpn_user='mvc'
-export TF_VAR_openvpn_password='VGh1ICA2IE'
-
 ########################
 # pcs_consul variables
 ########################
@@ -27,8 +22,6 @@ export BUSINESSOWNER="jeff.dickman@cloudtp.com"
 
 # No custom DNS
 export TF_VAR_domain_name_servers='[]'
-# No default VPC VPN configuration
-# export TF_VAR_ssh_cidrs='[]'
 
 # lockdown ami_id for the openvpn from marketplace: # Override in params
 export TF_VAR_openvpn_ami="ami-fe485b87"  # us-west-e based AMI
