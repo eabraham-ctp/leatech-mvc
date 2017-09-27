@@ -28,6 +28,12 @@ resource "aws_elb" "squid_elb" {
   }
 }
 
+resource "aws_proxy_protocol_policy" "proxy_access" {
+  load_balancer  = "${aws_elb.squid_elb.name}"
+  instance_ports = ["${var.squid_port}"]
+}
+
+
 # Add Cname to Route53 if available
 resource "aws_route53_record" "proxy" {
   count                   = "${length(var.route53_zone_id) > 0 ? 1 : 0}"

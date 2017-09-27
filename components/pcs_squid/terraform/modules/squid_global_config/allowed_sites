@@ -6,9 +6,11 @@ bootstrap.pypa.io
 .centos.org
 chef.bintray.com
 .chef.io
+jfrog.bintray.com
 dl.bintray.com
 ec2instances.info
 .fedoraproject.com
+.fedoraproject.org
 .trendmicro.com
 .trendmicro.ie
 .gems.hashicorp.com
@@ -19,6 +21,8 @@ g.global-ssl.fastly.net
 .jenkins-updates.cloudbees.com
 .microsoft.com
 .neo4j.org
+.nginx.org
+prodjenkinsreleases.blob.core.windows.net
 .python.org
 .r-project.org
 .redhat.com
@@ -32,5 +36,6 @@ rubygems.global.ssl.fastly.net
 .sonatype.com
 .sumologic.com
 .updates.jenkins-ci.org
+pkg.jenkins.io
 .windows.com
 .windowsupdate.com
