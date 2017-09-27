@@ -16,9 +16,9 @@ export TF_VAR_openvpn_password='VGh1ICA2IE'
 export TF_VAR_consul_instance_type="m4.large"
 
 # TAGS
-export APPLICATIONNAME="VMDB Platform Common Services"
+export APPLICATIONNAME="SVB Platform Common Services"
 export TECHNICALRESOURCE="CTP"
-export BUSINESSOWNER="jeremy.walters@virginmoney.com"
+export BUSINESSOWNER="jeff.dickman@cloudtp.com"
 
 
 ########################
@@ -28,9 +28,9 @@ export BUSINESSOWNER="jeremy.walters@virginmoney.com"
 # No custom DNS
 export TF_VAR_domain_name_servers='[]'
 # No default VPC VPN configuration
-export TF_VAR_ssh_cidrs='[]'
+# export TF_VAR_ssh_cidrs='[]'
 
 # lockdown ami_id for the openvpn from marketplace: # Override in params
-export TF_VAR_openvpn_ami="ami-1a8a6b63"  # eu-west based AMI
+export TF_VAR_openvpn_ami="ami-fe485b87"  # us-west-e based AMI
 
 export TF_VAR_vpn_conn_config="[\"|\"]" 
