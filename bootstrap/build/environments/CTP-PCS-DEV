@@ -47,6 +47,7 @@ export DEPLOY_WORKSTATIONS=TRUE
 export DEPLOY_CHEF=TRUE
 export DEPLOY_TREND=TRUE
 export DEPLOY_CW_METRICS=TRUE
+export DEPLOY_DIRECTORY_SERVICE=TRUE
 
 export TF_VAR_openvpn_ami="ami-1a8a6b63" # You need to of subscribed to the AMI in the marketplace
 
