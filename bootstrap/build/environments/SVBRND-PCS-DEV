@@ -61,13 +61,13 @@ export DEPLOY_DEVOPS=TRUE
 export DEPLOY_GITLAB=FALSE
 
 # encrypted AMI
-export ENV_AMI_ID="ami-2cb54a54" 
+export ENV_AMI_ID="ami-f9d92081"
 
-export TF_VAR_kms_ami_key="arn:aws:kms:us-west-2:754635990979:key/9dad86f2-c17f-4088-9903-ca6ad93d6e9a"
+export TF_VAR_kms_ami_key="9dad86f2-c17f-4088-9903-ca6ad93d6e9a"
 export TF_VAR_kms_general_key="arn:aws:kms:us-west-2:754635990979:key/66250c2a-2833-4626-8dd8-49c08b14bc76"
 
 # Trend
 #export TF_VAR_tm_ami_id="ami-3e5ebc47"  #you need to be subscribed to the AMI in the marketplace
 
 # Chef
-export TF_VAR_chef_user_key=""
+#export TF_VAR_chef_user_key=""
