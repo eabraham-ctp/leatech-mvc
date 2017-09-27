@@ -8,7 +8,7 @@
 
 provider "consul" {
   #
-  # No configuration requied it pulls from the Consul agent on the loacal computer
+  # No configuration required it pulls from the Consul agent on the loacal computer
   #
 }
 

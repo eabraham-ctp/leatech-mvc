@@ -228,8 +228,9 @@ data "template_file" "chef-reconfigure" {
     admin_firstname = "${var.admin_firstname}"
     admin_lastname  = "${var.admin_lastname}" 
     email_address   = "${var.email_address}"
-    org             = "${var.org}"
-    environment     = "${var.environment}"
+    conn_user_name  = "${var.conn_user_name}"  # Admin keys will be created here to be downloaded
+    org             = "${lower(var.org)}"
+    environment     = "${lower(var.environment)}"
   }
 }
 
@@ -326,4 +327,14 @@ resource "null_resource" "chef_reconfigure" {
     "aws_elb.chef",
     "null_resource.chef_install"
   ]
+}
+
+# Add Cname to Route53 if available
+resource "aws_route53_record" "chef" {
+  count                   = "${length(var.route53_zone_id) > 0 ? 1 : 0}"
+  zone_id                 = "${var.route53_zone_id}"
+  name                    = "chef"
+  type                    = "A"
+  ttl                     = "30"
+  records                 = ["${aws_instance.chef_server.private_ip}"]
 }

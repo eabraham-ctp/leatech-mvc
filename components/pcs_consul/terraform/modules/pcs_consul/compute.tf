@@ -48,3 +48,21 @@ resource "aws_instance" "node" {
   tags                   = "${merge(var.default_tags, map("Name", format("%s-%s-Consul-Node-EC2", var.org, var.environment)))}"
   depends_on             = ["aws_instance.primary"]
 }
+
+
+# Add Cname to Route53 if available
+resource "aws_route53_record" "consul" {
+  count                   = "${length(var.route53_zone_id) > 0 ? 1 : 0}"
+  zone_id                 = "${var.route53_zone_id}"
+  name                    = "consul"
+  type                    = "A"
+  ttl                     = "30"
+  records                 = ["${
+                                concat(
+                                  list(
+                                    aws_instance.primary.private_ip
+                                    ),
+                                    aws_instance.node.*.private_ip
+                                  )
+                              }"]
+}

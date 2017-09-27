@@ -7,8 +7,9 @@ source /etc/profile.d/proxy.sh
 # Initial Configuration
 chef-server-ctl reconfigure --accept-license
 
-sudo chef-server-ctl user-create ${admin_username} ${admin_firstname} ${admin_lastname} ${email_address} ${admin_password} -f /root/${admin_username}.pem
-sudo chef-server-ctl org-create ${org} ${org}-${environment} --association_user admin -f /root/${org}-validator.pem
+# Create admin user and org and make those available to the standard automation user for collection
+sudo chef-server-ctl user-create ${admin_username} ${admin_firstname} ${admin_lastname} ${email_address} ${admin_password} -f ~${conn_user_name}/${admin_username}-${org}-${environment}.pem
+sudo chef-server-ctl org-create ${org}-${environment} ${org} --association_user admin -f ~${conn_user_name}/${org}-${environment}-validator.pem
 
 # Install chef-manage
 chef-server-ctl install chef-manage

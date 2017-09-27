@@ -1,0 +1,10 @@
+{
+   "api.version":"v1",
+   "source":{
+      "sourceType":"LocalFile",
+      "name":"gitlab",
+      "category":"<%= node['sumologic']['category'] %>",
+      "pathExpression":"/var/log/gitlab/gitlab-rails*.log",
+      "blacklist":[]
+   }
+}

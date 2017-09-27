@@ -35,6 +35,16 @@ data "terraform_remote_state" "squid" {
   }
 }
 
+
+data "terraform_remote_state" "route53" {
+  backend     = "consul"
+  environment = "${terraform.env}"
+  config {
+    path = "aws/pcs/route53/tfstate"
+  }
+}   
+
+
 # Vault server     
 
 module "vault" {
@@ -68,4 +78,7 @@ module "vault" {
                               }"]  
   org                  = "${var.org}"
   environment          = "${var.environment}"
+  common_sg            = "${data.terraform_remote_state.vpc.common_sg}"
+  route53_zone_id      = "${data.terraform_remote_state.route53.zone_id}"
+
 }

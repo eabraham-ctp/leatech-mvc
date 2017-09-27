@@ -19,3 +19,6 @@ output "chef_elb_sg" {
 output "elb_address" {
   value = "${aws_elb.chef.dns_name}"
 }
+output "admin_username" {
+  value = "${var.admin_username}"
+}

@@ -33,7 +33,8 @@ module "talend" {
   workstation_sg          = "${var.workstation_sg}"
   vpc_security_group_ids  = ["${list (
                                       data.terraform_remote_state.vpc.rdp_sg,
-                                      data.terraform_remote_state.vpc.common_sg
+                                      data.terraform_remote_state.vpc.common_sg,
+                                      aws_security_group.talend_cluster_sg.id
                                     )
                               }"]
   s3_endpoint_prefix_id   = "${data.terraform_remote_state.vpc.s3_endpoint_prefix_id}"               

@@ -84,5 +84,14 @@ variable "openvpn_sg" {
 }
 
 variable "ami_id" {
-  type = "string"
+  type    = "string"
+}
+
+variable "private_domain" {
+  type    = "string"
+  default = ""
+}
+
+variable "route53_zone_id" {
+  default = ""
 }

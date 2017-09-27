@@ -111,3 +111,7 @@ variable "email_address" {}
 variable "openvpn_enabled" {}
 
 variable "openvpn_sg" {}
+
+variable "route53_zone_id" {
+  default = ""
+}

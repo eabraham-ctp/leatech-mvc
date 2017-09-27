@@ -61,3 +61,7 @@ variable "vpc_security_group_ids" {
   description = "List of security groups to attach to instance"
   type        = "list"
 }
+
+variable "route53_zone_id" {
+  default = ""
+}
