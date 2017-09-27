@@ -55,6 +55,6 @@ module "pcs_gitlab" {
   http_proxy          = "${format("http://%s",data.terraform_remote_state.squid.squid_elb_address)}"
   https_proxy         = "${format("http://%s",data.terraform_remote_state.squid.squid_elb_address)}"
   no_proxy            = "${data.consul_keys.config.var.no_proxy}${",trend.pcs-sbx.vmdb.internal"}"
-  group               = "${data.consul_keys.config.var.private_domain}"
-
+  route53_zone_id     = "${data.consul_keys.config.var.route53_zone_id}"
+  private_domain      = "${data.consul_keys.config.var.private_domain}"
 }

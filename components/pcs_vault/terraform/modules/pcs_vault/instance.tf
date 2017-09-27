@@ -24,3 +24,13 @@ resource "aws_instance" "vault_primary" {
   tags                   = "${merge(var.default_tags, map("Name", format("%s-%s-Vault-Master-EC2", var.org, var.environment)))}"
 }
 
+
+# Add Cname to Route53 if available
+resource "aws_route53_record" "vault_primary" {
+  count                   = "${length(var.route53_zone_id) > 0 ? 1 : 0}"
+  zone_id                 = "${var.route53_zone_id}"
+  name                    = "vault"
+  type                    = "A"
+  ttl                     = "30"
+  records                 = ["${aws_instance.vault_primary.private_ip}"]
+}

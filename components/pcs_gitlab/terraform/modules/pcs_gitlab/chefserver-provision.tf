@@ -25,12 +25,14 @@ resource "null_resource" "chef_server" {
   provisioner "chef" {
     run_list                = ["recipe[common::default]","role[gitlab]"]
     attributes_json         = "${data.template_file.server_chef_attributes.rendered}"
-    node_name               = "${lower(format("Gitlab.%s", var.private_domain))}"
+    # node_name               = "${lower(format("Gitlab.%s", var.private_domain))}"
+    node_name               = "gitlab"
+
     server_url              = "${var.chef_server_url}"
     fetch_chef_certificates = true
     recreate_client         = true
     user_name               = "${var.chef_user_name}"
-    user_key                = "${file(var.chef_user_key)}" #TECHDEBT should be in  vault
+    user_key                = "${file(var.chef_user_key)}" #TECHDEBT should come from vault
     http_proxy              = "${var.http_proxy}"
     https_proxy             = "${var.https_proxy}"
     no_proxy                = ["${var.no_proxy}"]

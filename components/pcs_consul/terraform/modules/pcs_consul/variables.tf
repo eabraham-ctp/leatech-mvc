@@ -70,6 +70,9 @@ variable "chef_user" {
   default = ""
 }
 
+variable "route53_zone_id" {
+  default = ""
+}
 variable "chef_key" {
   default = ""
 }

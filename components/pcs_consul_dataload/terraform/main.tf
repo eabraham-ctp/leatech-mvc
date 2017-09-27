@@ -27,6 +27,7 @@ resource "consul_key_prefix" "config" {
     "openvpn/openvpn_sg"  = "${var.openvpn_sg}"
     "kms/ami_key_arn"     = "${data.terraform_remote_state.kms.pcs_ami_kms}"
     "kms/general_key_arn" = "${data.terraform_remote_state.kms.pcs_general_kms}"
-    "private_domain"      = "${lower(format("%s-%s.%s.internal",element(split("-",var.org),1),var.environment,element(split("-",var.org),0)))}"
+    "private_domain"      = "${length(var.private_domain) > 0 ? var.private_domain : data.terraform_remote_state.route53.private_domain}"
+    "route53_zone_id"     = "${data.terraform_remote_state.route53.zone_id}"
   }
 } 

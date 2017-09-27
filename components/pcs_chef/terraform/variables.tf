@@ -20,10 +20,12 @@ variable "default_tags" {
 # Chef server variables
 variable "chef_name" {
   description = "A descriptive name for the Chef Server"
+  default = ""
 }
 
 variable "instance_type" {
   description = "Instance Type"
+  default = ""
 }
 
 variable "environment" {

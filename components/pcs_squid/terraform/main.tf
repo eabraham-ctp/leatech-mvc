@@ -35,4 +35,5 @@ module "squid_instance_config" {
                                       var.common_sg
                                     )}"]  
   squid_egress_ports              = "${var.squid_egress_ports}"
+  route53_zone_id                 = "${var.route53_zone_id}"
 }

@@ -10,3 +10,7 @@ output "chef_address" {
 output "chef_elb_address" {
   value = "${module.pcs_chef.elb_address}"
 }
+
+output "admin_username" {
+  value = "${module.pcs_chef.admin_username}"
+}

@@ -114,8 +114,12 @@ data "consul_keys" "config" {
     path    = "aws/pcs/config/${var.org}/${var.environment}/openvpn/openvpn_sg"
   }
   key {
+    name    = "route53_zone_id"
+    path    = "aws/pcs/config/${var.org}/${var.environment}/route53_zone_id"
+  }
+  key {
     name    = "private_domain"
     path    = "aws/pcs/config/${var.org}/${var.environment}/private_domain"
-    default = "${var.private_domain}"       
-  }  
+    default = "${var.private_domain}"
+  }
 }

@@ -6,6 +6,12 @@ function terraform_apply_squid () {
 		BANNER "Squid Cluster"
 		pause "Press enter key to continue"
 
+        if [ $DEPLOY_ROUTE53 == "TRUE" ]; then
+            cd $COMPONENTS_DIR/pcs_route53/terraform
+            export TF_VAR_private_domain=$(terraform output private_domain)
+            export TF_VAR_route53_zone_id=$(terraform output zone_id)
+        fi
+
 	    # Verify that the service subnets are set - this will require some work around #TECHDEBT there are nicer ways to do this
 		if [ -z ${TF_VAR_dmz_subnet_ids} ]  && [ $ACTION != "Destroying" ]; then
 			cd $COMPONENTS_DIR/pcs_network/terraform

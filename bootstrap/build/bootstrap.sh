@@ -329,6 +329,11 @@ function push_tfstate_to_consul () {
 	cd $COMPONENTS_DIR/pcs_squid/terraform
 	set_backend  "aws/pcs/squid/tfstate"
 	terraform init -force-copy	
+
+	# push directory_service
+	cd $COMPONENTS_DIR/pcs_directory/terraform
+	set_backend  "aws/pcs/directory/tfstate"
+	terraform init -force-copy	
 }
 
 ################################################
@@ -351,8 +356,8 @@ if [[ $COMPONENTS == "all" ]]; then
 		echo "Assuming this is the first run, "
 		check_keypair
 		upload_private_keys_to_bucket
-		create_general_kms
-		terraform_apply_iam_roles
+		# create_general_kms
+		# terraform_apply_iam_roles
 		vpc
 		create_base_ami 
 		terraform_apply_squid # Squid controls all outbound access and has no pre-requisites apart from and AMI and KMS
@@ -360,7 +365,7 @@ if [[ $COMPONENTS == "all" ]]; then
 		terraform_apply_consul
 		push_tfstate_to_consul
 		terraform_apply_vault
-        load_key_to_vault
+        write_ssh_key_to_vault "automation_key" ${TF_VAR_conn_private_key}
 	else
 		echo "Assuming this is a rerun."
 		# Simple workaround to destroy a running stack LIFO style
@@ -374,7 +379,7 @@ if [[ $COMPONENTS == "all" ]]; then
 			terraform_apply_squid 
 			terraform_apply_consul
 			terraform_apply_vault
-		    load_key_to_vault		
+		    write_ssh_key_to_vault		
 		 else
 		 	BACKEND="s3" # Move our state out of Consul 
 		 	terraform_apply_vault
@@ -388,6 +393,9 @@ else
 	case $COMPONENTS in
 		iam )
 			terraform_apply_iam_roles
+		;;
+		directory_service )
+			terraform_directory_service
 		;;
 		vpc )
 			vpc
@@ -410,7 +418,7 @@ else
 			terraform_apply_squid
 		;;
 		loadkeys )
-			load_key_to_vault
+			write_ssh_key_to_vault
 		;;
 		devops )
 			devops
@@ -428,7 +436,7 @@ else
 			create_base_ami
 		;;
 		chef )
-			terraform_chef
+			chef
 		;;
 		trend )
 			trend

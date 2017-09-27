@@ -132,3 +132,6 @@ variable "vpc_security_group_ids" {
   type        = "list"
 }
 
+variable "route53_zone_id" {
+  default = ""
+}

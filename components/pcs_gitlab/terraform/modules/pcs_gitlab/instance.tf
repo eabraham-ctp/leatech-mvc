@@ -24,3 +24,14 @@ resource "aws_instance" "gitlab" {
   iam_instance_profile   = "${aws_iam_instance_profile.gitlab_instance_profile.name}"
   tags                   = "${merge(var.default_tags, map("Name", format("%s-%s-Gitlab-EC2", var.org, var.environment)))}"
 }
+
+
+# Add Cname to Route53 if available
+resource "aws_route53_record" "gitlab" {
+  count                   = "${length(var.route53_zone_id) > 0 ? 1 : 0}"
+  zone_id                 = "${var.route53_zone_id}"
+  name                    = "gitlab"
+  type                    = "A"
+  ttl                     = "30"
+  records                 = ["${aws_instance.gitlab.private_ip}"]
+}

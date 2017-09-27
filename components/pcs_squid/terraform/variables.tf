@@ -55,3 +55,7 @@ variable "squid_egress_ports" {
   type        = "list"
   default     = ["0.0.0.0/0|80","0.0.0.0/0|443"]
 }
+
+variable "route53_zone_id" {
+  default = ""
+}

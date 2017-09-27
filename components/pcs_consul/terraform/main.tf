@@ -39,4 +39,5 @@ module "pcs_consul" {
   no_proxy            = "${var.no_proxy}"
   environment         = "${var.environment}"
   org                 = "${var.org}"
+  route53_zone_id     = "${var.route53_zone_id}"
 }

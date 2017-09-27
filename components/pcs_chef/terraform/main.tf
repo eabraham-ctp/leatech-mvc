@@ -66,5 +66,6 @@ module "pcs_chef" {
                                       data.terraform_remote_state.vpc.common_sg
                                     )
                               }"]  
-}
+  route53_zone_id     = "${data.consul_keys.config.var.route53_zone_id}"
 
+}

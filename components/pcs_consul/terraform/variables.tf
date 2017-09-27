@@ -74,3 +74,7 @@ variable "ssh_sg" {
 }
 
 variable "vpc_cidr" {}
+
+variable "route53_zone_id" {
+  default = ""
+}

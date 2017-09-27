@@ -33,6 +33,7 @@ variable "allocated_storage" {
   default = 10
 }
 variable "db_name" {
+  default = ""
 }
 variable "db_username" {
   default = "dbadmin"
@@ -44,6 +45,7 @@ variable "storage_type" {
   default = "gp2"
 }
 variable "db_identifier" {
+  default = ""
 }
 variable "db_instance_type" {
   default = "db.t2.small"
@@ -105,4 +107,19 @@ variable "talend_map" {
 variable "talend_iam_instance_profile" {
   description = "(Optional) The IAM Instance Profile to launch the instance with. Specified as the name of the Instance Profile. "
 }
+
+variable "cluster_sg_map" {
+  description = "Map to create security rules for Talend cluster from_port,to_port,protocol"
+  type        = "list"
+  default     = ["80|82|TCP","1099|1100|TCP","2181|2181|TCP","3334|5333|TCP","5439|5439|TCP","5601|5601|TCP","8000|8187|TCP","8443|8443|TCP","8580|8580|TCP","8888|8989|TCP","9001|9003|TCP","9060|9060|TCP","9080|9080|TCP","9092|9092|TCP","9200|9200|TCP","9998|9999|TCP","11480|11480|TCP","19924|19924|TCP","19928|19928|TCP","19999|19999|TCP","27017|27017|TCP","44444|44445|TCP"]
+}
+
+
+
+
+
+
+
+
+
 

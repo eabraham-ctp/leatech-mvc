@@ -57,3 +57,11 @@ data "terraform_remote_state" "rdsapp" {
     path = "aws/pcs/rdsapp/tfstate"
   }
 }   
+
+data "terraform_remote_state" "route53" {
+  backend     = "consul"
+  environment = "${terraform.env}"
+  config {
+    path = "aws/pcs/route53/tfstate"
+  }
+}   

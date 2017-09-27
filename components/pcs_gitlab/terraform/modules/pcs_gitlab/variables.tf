@@ -92,8 +92,8 @@ variable "ldap_port" {
 }
 
 variable "gitlab_version" {
-  default     = "9.3.5"
-  description = "Version of gitlab ie 9.3.5"
+  default     = "9.5.5-ce.0.el7"
+  description = "Version of gitlab ie 9.5.5-ce.0.el7"
 }
 
 variable "squid_elb_address" {
@@ -150,6 +150,10 @@ variable "https_proxy" {
 }
 
 variable "private_domain" {
+  default = ""
+}
+
+variable "route53_zone_id" {
   default = ""
 }
 

@@ -27,3 +27,13 @@ resource "aws_elb" "squid_elb" {
     create_before_destroy = false
   }
 }
+
+# Add Cname to Route53 if available
+resource "aws_route53_record" "proxy" {
+  count                   = "${length(var.route53_zone_id) > 0 ? 1 : 0}"
+  zone_id                 = "${var.route53_zone_id}"
+  name                    = "proxy"
+  type                    = "CNAME"
+  ttl                     = "30"
+  records                 = ["${aws_elb.squid_elb.dns_name}"]
+}

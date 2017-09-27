@@ -27,18 +27,19 @@ function upload_private_keys_to_bucket () {
 	fi
 }
 
-function load_key_to_vault ()
+function write_ssh_key_to_vault ()
 {
+    KEYNAME=$1
+    KEYFILE=$2
 
 	if [[ -z ${VAULT_ADDR} ]]; then
 		cd $COMPONENTS_DIR/pcs_vault/terraform
 		export VAULT_ADDR="$(terraform output vault_url)"
 	fi
-	# cd -
 	
 	export VAULT_ROOT_TOKEN=$(cat $VAULT_INIT_FILE| grep "Initial Root Token"|awk '{print $4}')
 	vault auth $VAULT_ROOT_TOKEN
 	VAULT_PATH=$(echo secret/aws/config/secret/${ORG}/${GROUP}/${ENV} | tr '[:upper:]' '[:lower:]')
-	echo "Uploading $TF_VAR_conn_private_key to vault at $VAULT_PATH"
-	cat $TF_VAR_conn_private_key | $VAULT_BINARY write $VAULT_PATH key=-
+	echo "Uploading $KEY to vault at $VAULT_PATH"
+	$VAULT_BINARY write ${VAULT_PATH}/${KEYNAME} value=@${KEYFILE}
 }
