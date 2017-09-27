@@ -453,6 +453,12 @@ else
 		gitlab )
 			gitlab
 		;;
+		artifactory )
+			artifactory
+		;;
+		jenkins )
+			jenkins
+		;;
 		* )
 			echo "The component $COMPONENTS is not recognised"
 			exit

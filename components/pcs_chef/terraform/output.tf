@@ -14,3 +14,7 @@ output "chef_elb_address" {
 output "admin_username" {
   value = "${module.pcs_chef.admin_username}"
 }
+
+output "admin_key" {
+  value = "${format("~/.ssh/%s-%s-%s.pem",lower(module.pcs_chef.admin_username),lower(var.org),lower(var.environment))}"
+}

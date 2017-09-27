@@ -1,0 +1,62 @@
+# For more information on configuration, see:
+#   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
+
+user <%= @perms %>;
+worker_processes auto;
+error_log /var/log/nginx/error.log;
+pid /run/nginx.pid;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log  /var/log/nginx/access.log  main;
+
+    sendfile            on;
+    tcp_nopush          on;
+    tcp_nodelay         on;
+    keepalive_timeout   65;
+    types_hash_max_size 2048;
+
+    include             /etc/nginx/mime.types;
+    default_type        application/octet-stream;
+    include /etc/nginx/conf.d/*.conf;
+    ## add ssl entries when https has been set in config
+    ssl_certificate      <%= node['base']['artifactory']['server_crt'] %>;
+    ssl_certificate_key  <%= node['base']['artifactory']['server_key'] %>;
+    ssl_session_cache shared:SSL:1m;
+    ssl_prefer_server_ciphers   on;
+
+    ## server configuration
+    server {
+        listen <%= node['base']['artifactory']['web_port'] %> ssl;
+        server_name <%= node['ipaddress'] %>;
+        if ($http_x_forwarded_proto = '') {
+            set $http_x_forwarded_proto  $scheme;
+        }
+        ## Application specific logs
+        ## access_log /var/log/nginx/10.199.4.196-access.log timing;
+        ## error_log /var/log/nginx/10.199.4.196-error.log;
+        rewrite ^/$ /artifactory/webapp/ redirect;
+        rewrite ^/artifactory/?(/webapp)?$ /artifactory/webapp/ redirect;
+        chunked_transfer_encoding on;
+        client_max_body_size 0;
+        location /artifactory/ {
+        proxy_read_timeout  900;
+        proxy_pass_header   Server;
+        proxy_cookie_path   ~*^/.* /;
+        proxy_pass          http://<%= node['ipaddress'] %>:8081/artifactory/;
+        proxy_set_header    X-Artifactory-Override-Base-Url $http_x_forwarded_proto://$host:$server_port/artifactory;
+        proxy_set_header    X-Forwarded-Port  $server_port;
+        proxy_set_header    X-Forwarded-Proto $http_x_forwarded_proto;
+        proxy_set_header    Host              $http_host;
+        proxy_set_header    X-Forwarded-For   $proxy_add_x_forwarded_for;
+        }
+    }
+}

@@ -149,8 +149,8 @@ resource "aws_security_group_rule" "chef_server_elb_inbound_https_from_openvpn" 
 # }
 
 resource "aws_elb" "chef" {
-  name     = "${var.org}-Chef-INT-${var.environment}"
-  tags     = "${merge(var.default_tags, map("Name", format("%s-%s-Chef-Int", var.org, var.environment)))}"
+  name     = "${var.org}-${var.environment}-Chef-INT-ELB"
+  tags     = "${merge(var.default_tags, map("Name", format("%s-%s-Chef-Int-ELB", var.org, var.environment)))}"
   subnets  = ["${split(",", var.subnet_ids)}"]
   internal = true
   security_groups = [
@@ -334,7 +334,7 @@ resource "aws_route53_record" "chef" {
   count                   = "${length(var.route53_zone_id) > 0 ? 1 : 0}"
   zone_id                 = "${var.route53_zone_id}"
   name                    = "chef"
-  type                    = "A"
+  type                    = "CNAME"
   ttl                     = "30"
-  records                 = ["${aws_instance.chef_server.private_ip}"]
+  records                 = ["${aws_elb.chef.dns_name}"]
 }
