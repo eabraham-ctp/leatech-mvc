@@ -48,7 +48,16 @@ data "terraform_remote_state" "rdsapp" {
   config {
     path = "aws/pcs/rdsapp/tfstate"
   }
-}   
+}
+
+# TechDebt - we'll need to add this back in when we deploy to new account
+// data "terraform_remote_state" "rdsapp" {
+//   backend     = "consul"
+//   environment = "${terraform.env}"
+//   config {
+//     path = "aws/pcs/rdsapp/tfstate"
+//   }
+// }      
 
 data "terraform_remote_state" "route53" {
   backend     = "consul"

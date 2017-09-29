@@ -28,6 +28,6 @@ function jenkins () {
 		terraform output | tee -a $OUTPUTS_FILE
 		cd $SCRIPT_DIR
 	else
-		echo "Gitlab disabled in ${PARAM_FILE}."
+		echo "Jenkins disabled in ${PARAM_FILE}."
 	fi	
 }
