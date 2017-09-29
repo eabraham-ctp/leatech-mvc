@@ -29,3 +29,7 @@ resource "consul_key_prefix" "config" {
     "route53_zone_id"     = "${data.terraform_remote_state.route53.zone_id}"
   }
 } 
+
+#TECHDEBT - add these back in when we deploy to new account
+// "kms/ami_key_arn"     = "${data.terraform_remote_state.kms.pcs_ami_kms}"
+// "kms/general_key_arn" = "${data.terraform_remote_state.kms.pcs_general_kms}"
