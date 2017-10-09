@@ -427,9 +427,6 @@ else
 		rstudio )
 			terraform_app rstudio
 		;;
-		talend )
-			talend_stack  #TECHDEBT ugly repetition of terraform_app
-		;;
 		kms )
 			create_general_kms
 		;;
@@ -442,9 +439,6 @@ else
 		chef_deploy )
 			chef_deploy
 		;;		
-		trend )
-			trend
-		;;
 		route53 )
 			route53
 		;;
@@ -453,12 +447,6 @@ else
 		;;	
 		cleanstate )
 			clean_local_state
-		;;
-		gitlab )
-			gitlab
-		;;
-		artifactory )
-			artifactory
 		;;
 		jenkins )
 			jenkins
