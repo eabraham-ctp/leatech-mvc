@@ -198,13 +198,13 @@ export TF_VAR_conn_public_key=$TF_VAR_conn_private_key.pub  #TECHDEBT this name 
 
 # The below default tags will be applied to all resources and are based on the tagging schema.
 # See https://docs.google.com/document/d/1PV1ulDUhF0l-3fbK0KLLSqPI7xh325Z5RmgIETsJo_w/edit#heading=h.lb7fhb6njibj for more information
-export TF_VAR_default_tags="{
-  Organization      = \"${ORG}-${GROUP}\"
-  ApplicationName   = \"${APPLICATIONNAME}\"
-  Environment       = \"${ENV}\"
-  TechnicalResource = \"${TECHNICALRESOURCE}\"
-  BusinessOwner     = \"${BUSINESSOWNER}\"
-}"
+# export TF_VAR_default_tags="{
+#   Organization      = \"${ORG}-${GROUP}\"
+#   ApplicationName   = \"${APPLICATIONNAME}\"
+#   Environment       = \"${ENV}\"
+#   TechnicalResource = \"${TECHNICALRESOURCE}\"
+#   BusinessOwner     = \"${BUSINESSOWNER}\"
+# }"
 
 # Allow for more granular environments
 export TERRAFORM_ENV=$(echo ${GROUP}-${ENV}|tr '[:upper:]' '[:lower:]')-$TF_VAR_region
