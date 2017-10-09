@@ -79,7 +79,7 @@ data "consul_keys" "config" {
   }
   key {
     name    = "no_proxy"
-    path    = "aws/pcs/config/no_proxy"
+    path    = "aws/pcs/config/${var.org}/${var.environment}/no_proxy"
     default = "169.254.169.254,localhost"
   }
   key {

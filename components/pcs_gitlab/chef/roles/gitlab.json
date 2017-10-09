@@ -1,0 +1,27 @@
+{
+  "name": "gitlab",
+  "description": "Gitlab role",
+  "json_class": "Chef::Role",
+  "default_attributes": {
+    "chef_client": {
+      "interval": 300,
+      "splay": 60
+    },
+    "sumologic": {
+      "use_proxy": true,
+      "sources": [
+        "gitlab"
+      ]
+    }
+  },
+  "override_attributes": {
+
+  },
+  "chef_type": "role",
+  "run_list": [
+    "recipe[omnibus-gitlab::default]"
+  ],
+  "env_run_lists": {
+
+  }
+}

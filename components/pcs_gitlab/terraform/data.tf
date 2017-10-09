@@ -75,7 +75,7 @@ data "consul_keys" "config" {
   }
   key {
     name    = "no_proxy"
-    path    = "aws/pcs/config/no_proxy"
+    path    = "aws/pcs/config/${var.org}/${var.environment}/no_proxy"
     default = "169.254.169.254,localhost"
   }
   key {
@@ -88,17 +88,6 @@ data "consul_keys" "config" {
     path    = "aws/pcs/config/${var.org}/${var.environment}/gitlab/instance_type"
     default = "m4.large"
   }
-  key {
-    name    = "chef_user_name"
-    path    = "aws/pcs/config/${var.org}/${var.environment}/gitlab/chef_user_name"
-    default = "${length(var.chef_user_name) > 0 ? var.chef_user_name : "admin" }"   
-  }
-  key {
-    name    = "chef_user_key"
-    path    = "aws/pcs/config/${var.org}/${var.environment}/gitlab/chef_user_key"
-    default = "${var.chef_user_key}"   
-  }
-
   key {
     name    = "install_url"
     path    = "aws/pcs/config/${var.org}/${var.environment}/chef/install_url"

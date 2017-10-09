@@ -18,3 +18,7 @@ output "gitlab_sg_id" {
 output "instance_profile_name" {
   value = "${module.pcs_gitlab.instance_profile_name}"
 }
+
+output "no_proxy" {
+  value = "${module.pcs_gitlab.no_proxy}"
+}

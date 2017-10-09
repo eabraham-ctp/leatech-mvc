@@ -40,7 +40,18 @@ data "terraform_remote_state" "squid" {
   config {
     path = "aws/pcs/squid/tfstate"
   }
-} 
+}
+
+
+# TECHDEBT KMS is damaged in Tform
+# data "terraform_remote_state" "kms" {
+#   backend     = "consul"
+#   environment = "${terraform.env}"
+#   config {
+#     path = "aws/pcs/kms/tfstate"
+
+#   }
+# }   
 
 data "terraform_remote_state" "rdsapp" {
   backend     = "consul"
@@ -48,16 +59,7 @@ data "terraform_remote_state" "rdsapp" {
   config {
     path = "aws/pcs/rdsapp/tfstate"
   }
-}
-
-# TechDebt - we'll need to add this back in when we deploy to new account
-// data "terraform_remote_state" "rdsapp" {
-//   backend     = "consul"
-//   environment = "${terraform.env}"
-//   config {
-//     path = "aws/pcs/rdsapp/tfstate"
-//   }
-// }      
+}   
 
 data "terraform_remote_state" "route53" {
   backend     = "consul"

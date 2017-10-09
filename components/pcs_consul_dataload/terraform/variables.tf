@@ -95,3 +95,15 @@ variable "private_domain" {
 variable "route53_zone_id" {
   default = ""
 }
+
+variable "kms_ami_key" {
+  default = ""
+}
+variable "kms_general_key" {
+  default = ""
+}
+
+variable "no_proxy" {
+  description = "A comma delmited string of things not to proxy"
+  default = "169.254.169.254,localhost"
+}

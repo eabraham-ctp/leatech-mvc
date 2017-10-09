@@ -15,5 +15,8 @@
     "gitlab_rb": {
       "external_url": "http://${server_private_ip}"
     }
+  },
+    "sumologic": {
+      "sources": ["gitlab"]
   }
 }

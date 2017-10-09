@@ -5,6 +5,12 @@ function jenkins () {
 		BANNER "Jenkins Server"
 		pause "Press enter key to continue"
 
+
+		# # Jenkins is built via a Chef server we need to make sure that the Chef is prepared to work in the kitchen we use the bash function chef_load
+		# chef_knife # Configures our knife.rb file
+		# knife ssl fetch # Cache SSL cert		
+		# chef_load role $COMPONENTS_DIR/pcs_jenkins/chef/nodes/jenkins.json
+
 		cd $COMPONENTS_DIR/pcs_jenkins/terraform
 
 		echo "Backend: $BACKEND"
@@ -28,6 +34,6 @@ function jenkins () {
 		terraform output | tee -a $OUTPUTS_FILE
 		cd $SCRIPT_DIR
 	else
-		echo "Jenkins disabled in ${PARAM_FILE}."
+		echo "Gitlab disabled in ${PARAM_FILE}."
 	fi	
 }

@@ -54,3 +54,50 @@ function chef () {
 		echo "Chef disabled in ${PARAM_FILE}."
 	fi	
 }
+ 
+# The following functions requires your local environment to be setup correctly
+function chef_knife () { 
+	BANNER "Chef knife config"
+	pause "Press enter key to continue"
+
+    if [ ! -d ~/.chef/trusted_certs ]; then
+	    mkdir -p ~/.chef/trusted_certs
+    fi
+    if [ ! -f ~/.chef/knife.rb ]; then
+	    cp -i $SCRIPT_DIR/environments/chef/knife.rb ~/.chef/
+    fi
+}
+
+# The following functions requires your local environment to be setup correctly
+function chef_deploy () { 
+	BANNER "Chef environment deploy"
+	pause "Press enter key to continue"
+
+	cd $COMPONENTS_DIR/pcs_chef/terraform
+    export CHEF_ADDRESS="https://$(terraform output chef_elb_address)"
+
+    chef_knife # Configures our knife.rb file
+
+    knife ssl fetch # Cache SSL cert
+
+	# Create environments on the Chef server
+	for CHEF_ENV in $(echo $CHEF_ENVIRONMENTS | tr "," " "); do
+		export CHEF_ENV
+		chef_load environment "$SCRIPT_DIR/environments/chef/environments/$CHEF_ENV.json" 
+	done
+
+	# Create roles on the Chef server
+	for ROLE in $(echo $CHEF_ROLES | tr "," " "); do
+		chef_load role "$SCRIPT_DIR/$ROLE" 
+	done
+
+	# Update cookboooks on the Chef Server
+	for COOKBOOK in $(echo $CHEF_COOKBOOKS | tr "," " "); do
+		cd $SCRIPT_DIR/$COOKBOOK
+		berks install # Download cookbooks locally handling dependencies
+		berks upload 
+		cd $SCRIPT_DIR
+	done
+}
+
+

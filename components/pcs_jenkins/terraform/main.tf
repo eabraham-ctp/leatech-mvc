@@ -37,7 +37,6 @@ module "pcs_jenkins" {
   chef_server_url     = "${lower(format("https://%s/organizations/%s-%s",data.terraform_remote_state.chef.chef_elb_address,var.org,var.environment))}"
   http_proxy          = "${format("http://%s",data.terraform_remote_state.squid.squid_elb_address)}"
   https_proxy         = "${format("http://%s",data.terraform_remote_state.squid.squid_elb_address)}"
-  no_proxy            = "${data.consul_keys.config.var.no_proxy}${",trend.pcs-sbx.vmdb.internal"}"
   route53_zone_id     = "${data.consul_keys.config.var.route53_zone_id}"
   private_domain      = "${data.consul_keys.config.var.private_domain}"
   chef_user_name      = "${data.terraform_remote_state.chef.admin_username}"

@@ -36,6 +36,10 @@ rubygems.global.ssl.fastly.net
 .sonatype.com
 .sumologic.com
 .updates.jenkins-ci.org
-pkg.jenkins.io
+.jenkins.io
 .windows.com
 .windowsupdate.com
+data.neo4j.com
+.tableau.com
+activation.tableausoftware.com
+.talend.com

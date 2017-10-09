@@ -47,6 +47,15 @@ resource "aws_security_group_rule" "egress_ssh" {
   security_group_id         = "${aws_security_group.devops.id}"
 }
 
+resource "aws_security_group_rule" "https_egress_to_vpc_s3_endpoint" {
+  count                     = "${length(var.s3_endpoint_prefix_id) > 0 ? 1 : 0}" 
+  type                      = "egress"
+  from_port                 = "443"
+  to_port                   = "443"
+  protocol                  = "tcp"
+  prefix_list_ids           = ["${var.s3_endpoint_prefix_id}"]
+  security_group_id         = "${aws_security_group.devops.id}"
+}
 ###############################################
 # Ingress - Global
 ###############################################

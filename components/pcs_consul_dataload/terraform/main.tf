@@ -25,11 +25,10 @@ resource "consul_key_prefix" "config" {
     "squid_elb_address"   = "${data.terraform_remote_state.squid.squid_elb_address}"
     "openvpn/enabled"     = "${length(var.openvpn_sg) > 0 ? "true" : "false"}"
     "openvpn/openvpn_sg"  = "${var.openvpn_sg}"
+    "kms/ami_key_arn"     = "${var.kms_ami_key}"
+    "kms/general_key_arn" = "${var.kms_general_key}"
     "private_domain"      = "${length(var.private_domain) > 0 ? var.private_domain : data.terraform_remote_state.route53.private_domain}"
     "route53_zone_id"     = "${data.terraform_remote_state.route53.zone_id}"
+    "no_proxy"            = "${format(".%s,%s",data.terraform_remote_state.route53.private_domain,var.no_proxy)}"
   }
 } 
-
-#TECHDEBT - add these back in when we deploy to new account
-// "kms/ami_key_arn"     = "${data.terraform_remote_state.kms.pcs_ami_kms}"
-// "kms/general_key_arn" = "${data.terraform_remote_state.kms.pcs_general_kms}"

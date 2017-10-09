@@ -152,5 +152,12 @@ EOF
 	# 		# assuming openvpn config is already set
 	# 	fi
 	fi
-	
+}
+
+# Multi-use function to upload a node/role/environment to the Chef Server
+function chef_load (){
+	if ! knife $1 from file $2; then
+		echo "$1 failed to load"
+		exit 31
+	fi
 }

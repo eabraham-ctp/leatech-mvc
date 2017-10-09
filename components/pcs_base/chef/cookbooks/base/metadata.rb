@@ -4,7 +4,7 @@ maintainer_email 'byron.jones@cloudtp.com'
 license 'All Rights Reserved'
 description 'Installs/Configures base'
 long_description 'Installs/Configures base'
-version '0.1.0'
+version '0.1.1'
 chef_version '>= 12.1' if respond_to?(:chef_version)
 depends "chef_hostname"
 depends "sumologic-collector"

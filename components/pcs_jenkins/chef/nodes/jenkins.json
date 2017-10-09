@@ -1,0 +1,22 @@
+{
+  "name": "jenkins",
+  "chef_environment": "vmdb-pcs-sbx",
+  "run_list": [
+  "role[base]",
+  "recipe[jenkins::master]"
+]
+,
+  "normal": {
+    "pcs_jenkins": {
+      "domain_name": "pcs-sbx.vmdb.internal"
+    },
+    "sumologic": {
+      "sources": [
+        "jenkins"
+      ]
+    },
+    "tags": [
+
+    ]
+  }
+}

@@ -42,9 +42,9 @@ resource "consul_keys" "dsm_server_sg" {
 
 resource "aws_security_group" "dsm_rds_access" {
   vpc_id      = "${var.vpc_id}"
-  name        = "${upper(var.org)}-${upper(var.group)}-${upper(var.environment)}-TrendMicroDSM-Database-Access-sg"
+  name        = "${upper(var.org)}-${upper(var.group)}-${upper(var.environment)}-TrendMicroDSM-Database-Access-SG"
   description = "Allow traffic for Trend to talk to RDS Instance"
-  tags        = "${merge(var.default_tags, map("Name", format("%s-%s-%s-TrendMicroDSM-Database-Access-sg", upper(var.org), upper(var.group), upper(var.environment) )))}"
+  tags        = "${merge(var.default_tags, map("Name", format("%s-%s-%s-TrendMicroDSM-Database-Access-SG", upper(var.org), upper(var.group), upper(var.environment) )))}"
 }
 
 resource "consul_keys" "dsm_rds_access_sg" {

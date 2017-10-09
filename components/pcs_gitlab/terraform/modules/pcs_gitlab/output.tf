@@ -18,3 +18,7 @@ output "gitlab_sg_id" {
 output "instance_profile_name" {
   value = "${aws_iam_instance_profile.gitlab_instance_profile.name}"
 }
+
+output "no_proxy" {
+  value = "${var.no_proxy}"
+}

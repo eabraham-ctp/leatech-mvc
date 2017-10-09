@@ -1,0 +1,41 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Stmt1504489586000",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetObject",
+                "s3:GetObjectAcl",
+                "s3:listbucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::vmdb-anltc-poc-dataproc-source",
+                "arn:aws:s3:::vmdb-anltc-poc-dataproc-source/*",
+                "arn:aws:s3:::vmdb-anltc-poc-dataproc-destination",
+                "arn:aws:s3:::vmdb-anltc-poc-dataproc-destination/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "s3:*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::vmdb-anltc-poc-dataproc-processing",
+                "arn:aws:s3:::vmdb-anltc-poc-dataproc-processing/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "kms:Encrypt",
+                "kms:Decrypt",
+                "kms:DescribeKey"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}

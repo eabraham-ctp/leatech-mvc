@@ -201,7 +201,7 @@ resource "aws_instance" "master" {
   tags                   = "${merge(var.default_tags, map("Name", format("%s-%s-JenkinsMaster-EC2", var.org, var.environment)))}"
 
   provisioner "chef" {
-    run_list                = ["role[base]","recipe[java::default]","recipe[jekins::master]"]
+    run_list                = ["role[base]","recipe[java::default]","recipe[jenkins::master]"]
     attributes_json         = "${data.template_file.chef_attributes.rendered}"
     node_name               = "jenkins"
     server_url              = "${var.chef_server_url}"

@@ -1,0 +1,23 @@
+{
+  "name": "squid",
+  "description": "Squid role",
+  "json_class": "Chef::Role",
+  "default_attributes": {
+    "chef_client": {
+      "interval": 300,
+      "splay": 60
+    },
+    "sumologic": {
+      "use_proxy": true,
+      "sources": [
+        "squid_access",
+        "squid_error"
+      ]
+    }
+  },
+  "override_attributes": {
+  },
+  "chef_type": "role",
+  "env_run_lists": {
+  }
+}

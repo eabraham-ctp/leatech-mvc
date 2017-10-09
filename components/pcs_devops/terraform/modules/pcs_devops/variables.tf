@@ -34,3 +34,8 @@ variable "ssh_sg_ids" {
   description = "List of SSH security groups IDs to grant access to"
   type        = "list"
 }
+
+variable "s3_endpoint_prefix_id" {
+  description = "[Optional] - S3 VPC endpoint prefix ID"
+  type        = ""
+}

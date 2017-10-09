@@ -17,7 +17,7 @@ export VERBOSE=false
 for file in include/*.sh; do
 	source ${file}
 done
-source environments/COMMON
+source ${SCRIPT_DIR}/environments/terraform/COMMON
 
 # General Variables
 export ORG="CTP"
@@ -46,7 +46,7 @@ Make sure to setup the AWS profile to match the profile in the
   --forces3                Ignore consul and use S3 as a backend
 
 Environments files should be located in the environments directory under the scripts dir:
-${SCRIPT_DIR}/environments
+${SCRIPT_DIR}/environments/terraform
 
 ** Note **
 AWS cli and boto profiles should be set to the organization name - i.e. CTP-PCS-SBX
@@ -130,7 +130,7 @@ echo >> $OUTPUTS_FILE
 echo "$(date) Deploying ${ORG}-${GROUP}-${ENV}" >> $OUTPUTS_FILE
 echo "=============================================" >> $OUTPUTS_FILE
 
-export PARAM_FILE="$SCRIPT_DIR/environments/${ORG}-${GROUP}-${ENV}"
+export PARAM_FILE="$SCRIPT_DIR/environments/terraform/${ORG}-${GROUP}-${ENV}"
 
 # import the environment's parameters
 if [[ -f ${PARAM_FILE} ]]; then
@@ -356,10 +356,11 @@ if [[ $COMPONENTS == "all" ]]; then
 		echo "Assuming this is the first run, "
 		check_keypair
 		upload_private_keys_to_bucket
-		# create_general_kms
-		# terraform_apply_iam_roles
+		create_general_kms
+		terraform_apply_iam_roles
 		vpc
 		create_base_ami 
+		route53
 		terraform_apply_squid # Squid controls all outbound access and has no pre-requisites apart from and AMI and KMS
 		pause "Squid takes a couple of minutes to stand up before it can route connections press enter after waiting"
 		terraform_apply_consul
@@ -438,6 +439,9 @@ else
 		chef )
 			chef
 		;;
+		chef_deploy )
+			chef_deploy
+		;;		
 		trend )
 			trend
 		;;

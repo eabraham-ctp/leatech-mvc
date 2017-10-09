@@ -40,7 +40,6 @@ module "pcs_gitlab" {
   conn_user_name      = "${data.consul_keys.config.var.conn_user_name}"
   conn_key_name       = "${data.consul_keys.config.var.conn_key_name}"
   conn_private_key    = "${data.consul_keys.config.var.conn_private_key}"
-  no_proxy            = "${data.consul_keys.config.var.no_proxy}"
   squid_elb_address   = "${data.terraform_remote_state.squid.squid_elb_address}"
   common_sg           = "${data.terraform_remote_state.vpc.common_sg}"
   ssh_sg              = "${data.terraform_remote_state.vpc.ssh_sg}"
@@ -50,11 +49,11 @@ module "pcs_gitlab" {
                                     )
                               }"]
   chef_server_url     = "${lower(format("https://%s/organizations/%s-%s",data.terraform_remote_state.chef.chef_elb_address,var.org,var.environment))}"
-  chef_user_name      = "${data.consul_keys.config.var.chef_user_name}"
-  chef_user_key       = "${data.consul_keys.config.var.chef_user_key}"
+  chef_user_name      = "${data.terraform_remote_state.chef.admin_username}"
+  chef_user_key       = "${data.terraform_remote_state.chef.admin_key}"
   http_proxy          = "${format("http://%s",data.terraform_remote_state.squid.squid_elb_address)}"
   https_proxy         = "${format("http://%s",data.terraform_remote_state.squid.squid_elb_address)}"
-  no_proxy            = "${data.consul_keys.config.var.no_proxy}${",trend.pcs-sbx.vmdb.internal"}"
+  no_proxy            = "${data.consul_keys.config.var.no_proxy}"
   route53_zone_id     = "${data.consul_keys.config.var.route53_zone_id}"
   private_domain      = "${data.consul_keys.config.var.private_domain}"
 }

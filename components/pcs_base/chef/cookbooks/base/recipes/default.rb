@@ -25,7 +25,6 @@ hostname "#{Chef::Config[:node_name]}.#{node['private_domain']}"
 # create our log sources config directory
 directory node['sumologic']['sync_config_dir'] do
   recursive true
-  # group 'sumologic_collector'
 end
 
 # determine platform to help us with which

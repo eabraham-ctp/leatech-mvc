@@ -23,11 +23,9 @@ resource "null_resource" "chef_server" {
   # }
 
   provisioner "chef" {
-    run_list                = ["recipe[common::default]","role[gitlab]"]
+    run_list                = ["role[base]","role[gitlab]"]
     attributes_json         = "${data.template_file.server_chef_attributes.rendered}"
-    # node_name               = "${lower(format("Gitlab.%s", var.private_domain))}"
     node_name               = "gitlab"
-
     server_url              = "${var.chef_server_url}"
     fetch_chef_certificates = true
     recreate_client         = true

@@ -71,12 +71,10 @@ resource "aws_iam_policy" "RegionalDeny" {
   policy     = "${file("${path.module}/RegionalDeny_iam_policy.json")}"
 }
 
-
 resource "aws_iam_policy" "StorageFull" {
   name       = "${element(split("-", var.org),0)}-StorageFull-policy"
   policy     = "${file("${path.module}/StorageFull_iam_policy.json")}"
 }
-
 
 resource "aws_iam_policy" "TrendMicro" {
   name       = "${element(split("-", var.org),0)}-TrendMicro-policy"
@@ -84,16 +82,46 @@ resource "aws_iam_policy" "TrendMicro" {
 }
 
 data "template_file" "kms_readonly_policy_template" {
-  template              = "${file("${path.module}/kms_readonly_policy.tpl")}"
+  template          = "${file("${path.module}/kms_readonly_policy.tpl")}"
   vars {
-    kms_ami_key       = "${var.kms_ami_key}",
-    kms_general_key   = "${var.kms_general_key}"
+    kms_ami_key       = "${data.terraform_remote_state.kms.pcs_ami_kms}",
+    kms_general_key   = "${data.terraform_remote_state.kms.pcs_general_kms}"
   }
 }
 
 resource "aws_iam_policy" "KMSReadOnly" {
   name                  = "${element(split("-", var.org),0)}-KMSReadOnly-policy" 
   policy                = "${data.template_file.kms_readonly_policy_template.rendered}"
+}
+
+resource "aws_iam_policy" "emr" {
+  name       = "${element(split("-", var.org),0)}-EMR-policy"
+  policy     = "${file("${path.module}/emr_iam_policy.json")}"
+}
+
+resource "aws_iam_policy" "developerworkstation" {
+  name       = "${element(split("-", var.org),0)}-DeveloperWorkstation-policy"
+  policy     = "${file("${path.module}/developerworkstation_iam_policy.json")}"
+}
+
+resource "aws_iam_policy" "neo4j" {
+  name       = "${element(split("-", var.org),0)}-Neo4j-policy"
+  policy     = "${file("${path.module}/neo4j_iam_policy.json")}"
+}
+
+resource "aws_iam_policy" "rstudio" {
+  name       = "${element(split("-", var.org),0)}-RStudio-policy"
+  policy     = "${file("${path.module}/rstudio_iam_policy.json")}"
+}
+
+resource "aws_iam_policy" "talend" {
+  name       = "${element(split("-", var.org),0)}-Talend-policy"
+  policy     = "${file("${path.module}/talend_iam_policy.json")}"
+}
+
+resource "aws_iam_policy" "tableau" {
+  name       = "${element(split("-", var.org),0)}-Tableau-policy"
+  policy     = "${file("${path.module}/tableau_iam_policy.json")}"
 }
 
 #MasterAdmin Role
@@ -163,11 +191,6 @@ resource "aws_iam_role_policy_attachment" "IAMAdmin_RegionalDeny_policy_attachme
     role       = "${aws_iam_role.IAMAdmin.name}"
     policy_arn = "${aws_iam_policy.RegionalDeny.arn}"
 }
-
-# resource "aws_iam_role_policy_attachment" "IAMAdmin_policy_attachment" {
-#     role       = "${aws_iam_role.IAMAdmin.name}"
-#     policy_arn = "${aws_iam_policy.IAMAdmin.arn}"
-# }
 
 
 #KMSAdmin Role
@@ -700,4 +723,196 @@ EOF
 resource "aws_iam_role_policy_attachment" "TrendMicro_policy_attachment" {
     role       = "${aws_iam_role.TrendMicro.name}"
     policy_arn = "${aws_iam_policy.TrendMicro.arn}"
+}
+
+
+## developerworkstation Service role 
+resource "aws_iam_role" "developerworkstation" {
+  name               = "${element(split("-", var.org),0)}-DeveloperWorkstation-service-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "developerworkstation_policy_attachment" {
+    role       = "${aws_iam_role.developerworkstation.name}"
+    policy_arn = "${aws_iam_policy.developerworkstation.arn}"
+}
+resource "aws_iam_instance_profile" "developerworkstation_instance_profile" {
+  name   = "${element(split("-", var.org),0)}-DeveloperWorkstation-InstanceProfile" 
+  role = "${aws_iam_role.developerworkstation.name}"
+}
+
+
+
+## emr Service role 
+resource "aws_iam_role" "emr" {
+  name               = "${element(split("-", var.org),0)}-EMR-service-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "emr_policy_attachment" {
+    role       = "${aws_iam_role.emr.name}"
+    policy_arn = "${aws_iam_policy.emr.arn}"
+}
+
+resource "aws_iam_instance_profile" "emr_instance_profile" {
+  name   = "${element(split("-", var.org),0)}-EMR-InstanceProfile" 
+  role = "${aws_iam_role.emr.name}"
+}
+
+
+## neo4j Service role 
+resource "aws_iam_role" "neo4j" {
+  name               = "${element(split("-", var.org),0)}-Neo4j-service-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "neo4j_policy_attachment" {
+    role       = "${aws_iam_role.neo4j.name}"
+    policy_arn = "${aws_iam_policy.neo4j.arn}"
+}
+
+resource "aws_iam_instance_profile" "neo4j_instance_profile" {
+  name   = "${element(split("-", var.org),0)}-Neo4j-InstanceProfile" 
+  role = "${aws_iam_role.neo4j.name}"
+}
+
+
+## rstudio Service role 
+resource "aws_iam_role" "rstudio" {
+  name               = "${element(split("-", var.org),0)}-RStudio-service-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "rstudio_policy_attachment" {
+    role       = "${aws_iam_role.rstudio.name}"
+    policy_arn = "${aws_iam_policy.rstudio.arn}"
+}
+
+resource "aws_iam_instance_profile" "rstudio_instance_profile" {
+  name   = "${element(split("-", var.org),0)}-RStudio-InstanceProfile" 
+  role = "${aws_iam_role.rstudio.name}"
+}
+
+
+## talend Service role 
+resource "aws_iam_role" "talend" {
+  name               = "${element(split("-", var.org),0)}-Talend-service-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "talend_policy_attachment" {
+    role       = "${aws_iam_role.talend.name}"
+    policy_arn = "${aws_iam_policy.talend.arn}"
+}
+
+resource "aws_iam_instance_profile" "talend_instance_profile" {
+  name   = "${element(split("-", var.org),0)}-Talend-InstanceProfile" 
+  role = "${aws_iam_role.talend.name}"
+}
+
+
+## tableau Service role 
+resource "aws_iam_role" "tableau" {
+  name               = "${element(split("-", var.org),0)}-Tableau-service-role"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "tableau_policy_attachment" {
+    role       = "${aws_iam_role.tableau.name}"
+    policy_arn = "${aws_iam_policy.tableau.arn}"
+}
+
+resource "aws_iam_instance_profile" "tableau_instance_profile" {
+  name   = "${element(split("-", var.org),0)}-Tableau-InstanceProfile" 
+  role = "${aws_iam_role.tableau.name}"
 }
