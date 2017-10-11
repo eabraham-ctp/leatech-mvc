@@ -11,12 +11,6 @@ variable "ct_trails" {type = "list"}
 variable "force_destroy" {}
 variable "versioning" {}
 
-output "cl_role_arn" { value = "${aws_iam_role.ct.arn}" }
-output "cl_log_group_arn" { value = "${aws_cloudwatch_log_group.ct.arn}" }
-output "bucket" { value = "${aws_s3_bucket.kms.id}" }
-output "sns_topic_name" { value = "${aws_sns_topic.ct.id}" }
-
-
 data "aws_region" "current" {current=true}
 data "aws_caller_identity" "current" {}
 
@@ -29,6 +23,17 @@ resource "aws_s3_bucket" "kms" {
   versioning = {
     enabled = "${var.versioning}"
   }
+  
+  lifecycle_rule {
+    id = "move-to-gracier"
+    enabled = true
+    prefix = ""
+    transition {
+      days = 90
+      storage_class = "GLACIER"
+    }
+  }
+  
   tags = "${merge(var.default_tags, map("Name", "${lower(var.org)}-${lower(var.environment)}-cloudtrail-kms-log"))}"
 }
 
@@ -41,6 +46,17 @@ resource "aws_s3_bucket" "logs" {
   versioning = {
     enabled = "${var.versioning}"
   }
+  
+  lifecycle_rule {
+    id = "move-to-gracier"
+    enabled = true
+    prefix = ""
+    transition {
+      days = 90
+      storage_class = "GLACIER"
+    }
+  }
+  
   tags = "${merge(var.default_tags, map("Name", "${lower(var.org)}-${lower(var.environment)}-cloudtrail-logs"))}"
 }
 
@@ -55,39 +71,33 @@ resource "aws_s3_bucket_policy" "kms" {
   bucket = "${aws_s3_bucket.kms.id}"
   policy = <<POLICY
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "AWSCloudTrailAclCheck",
-            "Effect": "Allow",
-            "Principal": {
-              "Service": "cloudtrail.amazonaws.com"
-            },
-            "Action": "s3:GetBucketAcl",
-            "Resource": "arn:aws:s3:::${aws_s3_bucket.kms.id}"
-        },
-        {
-            "Sid": "AWSCloudTrailWrite",
-            "Effect": "Allow",
-            "Principal": {
-              "Service": "cloudtrail.amazonaws.com"
-            },
-            "Action": "s3:PutObject",
-            "Resource": "arn:aws:s3:::${aws_s3_bucket.kms.id}/*",
-            "Condition": {
-                "StringEquals": {
-                    "s3:x-amz-acl": "bucket-owner-full-control"
-                }
-            }
-        },
-        {
-          "Sid":"CroosAccountPutObject",
-          "Effect":"Allow",
-          "Principal": {"AWS": "*"},
-          "Action": "s3:PutObject",
-          "Resource":["arn:aws:s3:::${aws_s3_bucket.kms.id}/*"]
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AWSCloudTrailAclCheck",
+      "Effect": "Allow",
+      "Principal": {"Service": "cloudtrail.amazonaws.com"},
+      "Action": "s3:GetBucketAcl",
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.kms.id}"
+    },
+    {
+      "Sid": "AWSCloudTrailWrite",
+      "Effect": "Allow",
+      "Principal": {"Service": "cloudtrail.amazonaws.com"},
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.kms.id}/*",
+      "Condition": {"StringEquals": {"s3:x-amz-acl": "bucket-owner-full-control"}}
+    },
+    {
+      "Sid":"CrossAccountPutObject",
+      "Effect":"Allow",
+      "Principal": {
+        "AWS": ["${join("\",\"", var.ct_accounts)}"]
+      },
+      "Action": "s3:PutObject",
+      "Resource":["arn:aws:s3:::${aws_s3_bucket.kms.id}/*"]
+    }
+  ]
 }
 POLICY
 }
@@ -97,39 +107,41 @@ resource "aws_s3_bucket_policy" "logs" {
   bucket = "${aws_s3_bucket.logs.id}"
   policy = <<POLICY
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "AWSCloudTrailAclCheck",
-            "Effect": "Allow",
-            "Principal": {
-              "Service": "cloudtrail.amazonaws.com"
-            },
-            "Action": "s3:GetBucketAcl",
-            "Resource": "arn:aws:s3:::${aws_s3_bucket.logs.id}"
-        },
-        {
-            "Sid": "AWSCloudTrailWrite",
-            "Effect": "Allow",
-            "Principal": {
-              "Service": "cloudtrail.amazonaws.com"
-            },
-            "Action": "s3:PutObject",
-            "Resource": "arn:aws:s3:::${aws_s3_bucket.logs.id}/*",
-            "Condition": {
-                "StringEquals": {
-                    "s3:x-amz-acl": "bucket-owner-full-control"
-                }
-            }
-        },
-        {
-          "Sid":"CroosAccountPutObject",
-          "Effect":"Allow",
-          "Principal": {"AWS": "*" },
-          "Action":["s3:PutObject"],
-          "Resource":["arn:aws:s3:::${aws_s3_bucket.logs.id}/*"]
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "AWSCloudTrailAclCheck",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "cloudtrail.amazonaws.com"
+      },
+      "Action": "s3:GetBucketAcl",
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.logs.id}"
+    },
+  {
+      "Sid": "AWSCloudTrailWrite",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "cloudtrail.amazonaws.com"
+      },
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.logs.id}/*",
+      "Condition": {
+          "StringEquals": {
+              "s3:x-amz-acl": "bucket-owner-full-control"
+          }
+      }
+    },
+    {
+      "Sid":"CrossAccountPutObject",
+      "Effect":"Allow",
+      "Principal": {
+        "AWS": ["${join("\",\"", var.ct_accounts)}"]
+      },
+      "Action": "s3:PutObject",
+      "Resource":["arn:aws:s3:::${aws_s3_bucket.logs.id}/*"]
+    }
+  ]
 }
 POLICY
 }
@@ -163,23 +175,24 @@ resource "aws_iam_policy" "ct" {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "AWSCloudTrailCreateLogStream",
+      "Sid": "CloudWathLogs",
       "Effect": "Allow",
       "Action": [
-        "logs:CreateLogStream"
+        "logs:CreateLogStream",
+        "logs:PutLogEvents"
       ],
       "Resource": [
         "arn:aws:logs:*:*:log-group:/${var.org}/${var.environment}/Cloudtrail-CW-LOG:log-stream:*"
       ]
     },
     {
-      "Sid": "AWSCloudTrailPutLogEvents",
+      "Sid": "KMS",
       "Effect": "Allow",
       "Action": [
-        "logs:PutLogEvents"
+        "kms:*"
       ],
       "Resource": [
-        "arn:aws:logs:*:*:log-group:/${var.org}/${var.environment}/Cloudtrail-CW-LOG:log-stream:*"
+        "*"
       ]
     }
   ]
@@ -196,6 +209,7 @@ resource "aws_iam_role_policy_attachment" "ct" {
 resource "aws_sns_topic" "ct" {
   # SNS Topic to get cloudtrail notifications
   name = "${upper(var.org)}-${upper(var.environment)}-Cloudtrail-Topic"
+  depends_on = ["aws_iam_role_policy_attachment.ct", "aws_s3_bucket_policy.kms", "aws_s3_bucket_policy.logs"]
 }
 
 resource "aws_sns_topic_policy" "ct" {
@@ -225,6 +239,7 @@ resource "aws_sqs_queue" "ct" {
   
   #enable long polling
   receive_wait_time_seconds  = 20
+  depends_on = ["aws_iam_role_policy_attachment.ct", "aws_s3_bucket_policy.kms", "aws_s3_bucket_policy.logs"]
 }
 
 resource "aws_sqs_queue_policy" "ct" {
@@ -247,14 +262,6 @@ resource "aws_sqs_queue_policy" "ct" {
 POLICY
 }
 
-resource "aws_sns_topic_subscription" "sqs" {
-  # Link SNS and SQS
-  topic_arn = "${aws_sns_topic.ct.arn}"
-  protocol  = "sqs"
-  endpoint  = "${aws_sqs_queue.ct.arn}"
-  depends_on = ["aws_sns_topic.ct", "aws_sqs_queue.ct"]
-}
-
 resource "aws_s3_bucket_notification" "ct" {
   # S3 SNS Notifications
   bucket = "${aws_s3_bucket.kms.id}"
@@ -264,3 +271,19 @@ resource "aws_s3_bucket_notification" "ct" {
   }
   depends_on = ["aws_sns_topic.ct", "aws_s3_bucket_policy.kms"]
 }
+
+resource "aws_sns_topic_subscription" "ct" {
+  # Link SNS and SQS
+  topic_arn = "${aws_sns_topic.ct.arn}"
+  protocol  = "sqs"
+  endpoint  = "${aws_sqs_queue.ct.arn}"
+  depends_on = ["aws_s3_bucket_notification.ct", "aws_cloudwatch_log_group.ct"]
+}
+
+output "cl_role_arn" { value = "${aws_iam_role.ct.arn}" }
+output "cl_log_group_arn" { value = "${aws_cloudwatch_log_group.ct.arn}" }
+output "bucket" { value = "${aws_s3_bucket.kms.id}" }
+output "sns_topic_name" { value = "${aws_sns_topic.ct.id}" }
+output "sns_subscription_id" {value = "${aws_sns_topic_subscription.ct.id}"}
+
+

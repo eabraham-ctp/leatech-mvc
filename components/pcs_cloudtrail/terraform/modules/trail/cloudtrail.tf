@@ -5,17 +5,24 @@ variable "group" {}
 variable "default_tags" {type="map"}
 variable "cl_role_arn" {}
 variable "cl_log_group_arn" {}
+variable "sns_subscription_id" {}
 variable "bucket" {}
 variable "bucket_prefix" {}
 variable "sns_topic_name" {}
 variable "kms_key" {}
+
+resource "null_resource" "dummy_dependency" {
+  triggers {
+    dependency_id = "${var.sns_subscription_id}"
+  }
+}
 
 resource "aws_cloudtrail" "ct" {
   name                          = "${upper(var.org)}-${upper(var.environment)}-Cloudtrail"
   enable_logging                = true
   enable_log_file_validation    = true
   include_global_service_events = true
-  is_multi_region_trail         = false
+  is_multi_region_trail         = true
   
   #cloudwatch
   cloud_watch_logs_role_arn     = "${var.cl_role_arn}"
@@ -32,4 +39,5 @@ resource "aws_cloudtrail" "ct" {
   kms_key_id                    = "${var.kms_key}"
   
   tags = "${merge(var.default_tags, map("Name", "${upper(var.org)}-${upper(var.environment)}-Cloudtrail"))}"
+  depends_on = ["null_resource.dummy_dependency"]
 }
