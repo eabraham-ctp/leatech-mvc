@@ -39,12 +39,12 @@ resource "aws_autoscaling_group" "squid_asg" {
         }",
         "${map(
           "key", "ApplicationName",
-          "value", "${var.default_tags["ApplicationName"]}",
+          "value", "${var.ApplicationName}",
           "propagate_at_launch", true)
         }",
         "${map(
-          "key", "TechnicalResource",
-          "value", "${var.default_tags["TechnicalResource"]}",
+          "key", "TechnicalOwner",
+          "value", "${var.default_tags["TechnicalOwner"]}",
           "propagate_at_launch", true)
         }",
         "${map(

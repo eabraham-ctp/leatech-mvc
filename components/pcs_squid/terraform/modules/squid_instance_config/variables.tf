@@ -65,3 +65,7 @@ variable "vpc_security_group_ids" {
 variable "route53_zone_id" {
   default = ""
 }
+
+variable "ApplicationName" {
+  default ="Squid"
+}
