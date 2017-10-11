@@ -18,10 +18,6 @@ function create_general_kms () {
 		KMS_GENERAL_KEY=$(terraform output pcs_general_kms | grep  '[0-9a-z]*-[0-9a-z]*-[0-9a-z]*-[0-9a-z]*-[0-9a-z]*' 2> /dev/null)
 		KMS_AMI_KEY=$(terraform output pcs_ami_kms | grep '[0-9a-z]*-[0-9a-z]*-[0-9a-z]*-[0-9a-z]*-[0-9a-z]*' 2> /dev/null)
 
-		export TF_VAR_kms_ami_key=$(terraform output pcs_ami_kms)
-    export TF_VAR_kms_general_key=$(terraform output pcs_general_kms)
-    export TF_VAR_kms_cloudtrail_key=$(terraform output pcs_cloudtrail_kms)
-
 		if [[ -z $KMS_GENERAL_KEY ]] || [[ -z $KMS_AMI_KEY ]]; then
 
 			terraform init
@@ -42,6 +38,11 @@ function create_general_kms () {
 			terraform output | tee -a $OUTPUTS_FILE
 
 			export KMS_AMI_KEY=$(terraform output pcs_ami_kms)
+
+			export TF_VAR_kms_ami_key=$(terraform output pcs_ami_kms)
+      export TF_VAR_kms_general_key=$(terraform output pcs_general_kms)
+      export TF_VAR_kms_cloudtrail_key=$(terraform output pcs_cloudtrail_kms)
+
 		fi
 		cd $SCRIPT_DIR
 	else
