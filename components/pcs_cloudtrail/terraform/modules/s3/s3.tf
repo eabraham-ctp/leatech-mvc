@@ -91,11 +91,25 @@ resource "aws_s3_bucket_policy" "kms" {
     {
       "Sid":"CrossAccountPutObject",
       "Effect":"Allow",
-      "Principal": {
-        "AWS": ["${join("\",\"", var.ct_accounts)}"]
-      },
+      "Principal": {"AWS": ["${join("\",\"", var.ct_accounts)}"]},
       "Action": "s3:PutObject",
       "Resource":["arn:aws:s3:::${aws_s3_bucket.kms.id}/*"]
+    },
+    {
+      "Sid": "DenyIncorrectEncryptionHeader",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.kms.id}/*",
+      "Condition": {"StringNotEquals": {"s3:x-amz-server-side-encryption": "aws:kms"}}
+     },
+     {
+      "Sid": "DenyUnEncryptedObjectUploads",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.kms.id}/*",
+      "Condition": {"Null": {"s3:x-amz-server-side-encryption": true}}
     }
   ]
 }
@@ -112,34 +126,40 @@ resource "aws_s3_bucket_policy" "logs" {
     {
       "Sid": "AWSCloudTrailAclCheck",
       "Effect": "Allow",
-      "Principal": {
-        "Service": "cloudtrail.amazonaws.com"
-      },
+      "Principal": {"Service": "cloudtrail.amazonaws.com"},
       "Action": "s3:GetBucketAcl",
       "Resource": "arn:aws:s3:::${aws_s3_bucket.logs.id}"
     },
-  {
+    {
       "Sid": "AWSCloudTrailWrite",
       "Effect": "Allow",
-      "Principal": {
-        "Service": "cloudtrail.amazonaws.com"
-      },
+      "Principal": {"Service": "cloudtrail.amazonaws.com"},
       "Action": "s3:PutObject",
       "Resource": "arn:aws:s3:::${aws_s3_bucket.logs.id}/*",
-      "Condition": {
-          "StringEquals": {
-              "s3:x-amz-acl": "bucket-owner-full-control"
-          }
-      }
+      "Condition": {"StringEquals": {"s3:x-amz-acl": "bucket-owner-full-control"}}
     },
     {
       "Sid":"CrossAccountPutObject",
       "Effect":"Allow",
-      "Principal": {
-        "AWS": ["${join("\",\"", var.ct_accounts)}"]
-      },
+      "Principal": {"AWS": ["${join("\",\"", var.ct_accounts)}"]},
       "Action": "s3:PutObject",
       "Resource":["arn:aws:s3:::${aws_s3_bucket.logs.id}/*"]
+    },
+    {
+      "Sid": "DenyIncorrectEncryptionHeader",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.logs.id}/*",
+      "Condition": {"StringNotEquals": {"s3:x-amz-server-side-encryption": "AES256"}}
+     },
+     {
+      "Sid": "DenyUnEncryptedObjectUploads",
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "s3:PutObject",
+      "Resource": "arn:aws:s3:::${aws_s3_bucket.logs.id}/*",
+      "Condition": {"Null": {"s3:x-amz-server-side-encryption": true}}
     }
   ]
 }
