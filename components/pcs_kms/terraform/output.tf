@@ -11,3 +11,7 @@ output "pcs_ami_kms" {
 output "pcs_general_kms" {
   value = "${module.pcs_general_kms.kms_key}"
 }
+
+output "pcs_cloudtrail_kms" {
+  value = "${module.pcs_general_kms.kms_key}"
+}

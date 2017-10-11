@@ -15,7 +15,19 @@ variable "environment" {
   description = "SDLC environment"
 }
 
+variable "group" {
+  description = "account group"
+}
+
 variable "default_tags" {
   description = "tags"
   type="map"
+}
+
+variable "kms_ami_key" {
+  description = "key for ami encryption"
+}
+
+variable "kms_general_key" {
+  description = "key for general encryption"
 }

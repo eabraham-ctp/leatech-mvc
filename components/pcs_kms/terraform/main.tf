@@ -28,3 +28,14 @@ module "pcs_general_kms" {
   kms_description     = "General encryption key for all things not AMI"
 
 }
+
+module "pcs_cloudtrail_kms" {
+  source              = "modules/pcs_kms"
+  default_tags        = "${var.default_tags}"
+  environment         = "${var.environment}"
+  org                 = "${var.org}"
+  region              = "${var.region}"  
+  kms_name            = "CloudTrailEncrypt-key"
+  kms_description     = "CloudTrail encryption key"
+
+}

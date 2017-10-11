@@ -27,106 +27,76 @@ provider "aws" {
 
 #Custom Policies
 resource "aws_iam_policy" "AuditAdmin" {
-  name       = "${element(split("-", var.org),0)}-AuditAdmin-policy"
+  name       = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-AuditAdmin-policy"
   policy     = "${file("${path.module}/AuditAdmin_iam_policy.json")}"
 }
 
 resource "aws_iam_policy" "BillingDeny" {
-  name       = "${element(split("-", var.org),0)}-BillingDeny-policy"
+  name       = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-BillingDeny-policy"
   policy     = "${file("${path.module}/BillingDeny_iam_policy.json")}"
 }
 
 resource "aws_iam_policy" "CloudAdmin" {
-  name       = "${element(split("-", var.org),0)}-CloudAdmin-policy"
+  name       = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-CloudAdmin-policy"
   policy     = "${file("${path.module}/CloudAdmin_iam_policy.json")}"
 }
 
 resource "aws_iam_policy" "DevOpsAdmin" {
-  name       = "${element(split("-", var.org),0)}-DevOpsAdmin-policy"
+  name       = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-DevOpsAdmin-policy"
   policy     = "${file("${path.module}/DevOpsAdmin_iam_policy.json")}"
 }
 
 resource "aws_iam_policy" "Dome9ReadOnly" {
-  name       = "${element(split("-", var.org),0)}-Dome9ReadOnly-policy"
+  name       = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-Dome9ReadOnly-policy"
   policy     = "${file("${path.module}/Dome9ReadOnly_iam_policy.json")}"
 }
 
 resource "aws_iam_policy" "GeneralDeny" {
-  name       = "${element(split("-", var.org),0)}-GeneralDeny-policy"
+  name       = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-GeneralDeny-policy"
   policy     = "${file("${path.module}/GeneralDeny_iam_policy.json")}"
 }
 
 resource "aws_iam_policy" "IAMEngineering" {
-  name       = "${element(split("-", var.org),0)}-IAMEngineering-policy"
+  name       = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-IAMEngineering-policy"
   policy     = "${file("${path.module}/IAMEngineering_iam_policy.json")}"
 }
 
 resource "aws_iam_policy" "MessagingFullAccess" {
-  name       = "${element(split("-", var.org),0)}-MessagingFullAccess-policy"
+  name       = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-MessagingFullAccess-policy"
   policy     = "${file("${path.module}/MessagingFullAccess_iam_policy.json")}"
 }
 
 resource "aws_iam_policy" "RegionalDeny" {
-  name       = "${element(split("-", var.org),0)}-RegionalDeny-policy"
+  name       = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-RegionalDeny-policy"
   policy     = "${file("${path.module}/RegionalDeny_iam_policy.json")}"
 }
 
 resource "aws_iam_policy" "StorageFull" {
-  name       = "${element(split("-", var.org),0)}-StorageFull-policy"
+  name       = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-StorageFull-policy"
   policy     = "${file("${path.module}/StorageFull_iam_policy.json")}"
-}
-
-resource "aws_iam_policy" "TrendMicro" {
-  name       = "${element(split("-", var.org),0)}-TrendMicro-policy"
-  policy     = "${file("${path.module}/TrendMicro_iam_policy.json")}"
 }
 
 data "template_file" "kms_readonly_policy_template" {
   template          = "${file("${path.module}/kms_readonly_policy.tpl")}"
   vars {
-    kms_ami_key       = "${data.terraform_remote_state.kms.pcs_ami_kms}",
-    kms_general_key   = "${data.terraform_remote_state.kms.pcs_general_kms}"
+    kms_ami_key       = "${var.kms_ami_key}",
+    kms_general_key   = "${var.kms_general_key}"
   }
 }
 
 resource "aws_iam_policy" "KMSReadOnly" {
-  name                  = "${element(split("-", var.org),0)}-KMSReadOnly-policy" 
+  name                  = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-KMSReadOnly-policy" 
   policy                = "${data.template_file.kms_readonly_policy_template.rendered}"
 }
 
-resource "aws_iam_policy" "emr" {
-  name       = "${element(split("-", var.org),0)}-EMR-policy"
-  policy     = "${file("${path.module}/emr_iam_policy.json")}"
-}
-
 resource "aws_iam_policy" "developerworkstation" {
-  name       = "${element(split("-", var.org),0)}-DeveloperWorkstation-policy"
+  name       = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-DeveloperWorkstation-policy"
   policy     = "${file("${path.module}/developerworkstation_iam_policy.json")}"
-}
-
-resource "aws_iam_policy" "neo4j" {
-  name       = "${element(split("-", var.org),0)}-Neo4j-policy"
-  policy     = "${file("${path.module}/neo4j_iam_policy.json")}"
-}
-
-resource "aws_iam_policy" "rstudio" {
-  name       = "${element(split("-", var.org),0)}-RStudio-policy"
-  policy     = "${file("${path.module}/rstudio_iam_policy.json")}"
-}
-
-resource "aws_iam_policy" "talend" {
-  name       = "${element(split("-", var.org),0)}-Talend-policy"
-  policy     = "${file("${path.module}/talend_iam_policy.json")}"
-}
-
-resource "aws_iam_policy" "tableau" {
-  name       = "${element(split("-", var.org),0)}-Tableau-policy"
-  policy     = "${file("${path.module}/tableau_iam_policy.json")}"
 }
 
 #MasterAdmin Role
 resource "aws_iam_role" "MasterAdmin" {
-  name               = "${element(split("-", var.org),0)}-MasterAdmin-user-role"
+  name               = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-MasterAdmin-user-role"
 
   assume_role_policy = <<EOF
 {
@@ -153,7 +123,7 @@ resource "aws_iam_role_policy_attachment" "MasterAdmin_AdministratorAccess_polic
 
 #IAMAdmin Role
 resource "aws_iam_role" "IAMAdmin" {
-  name               = "${element(split("-", var.org),0)}-IAMAdmin-user-role"
+  name               = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-IAMAdmin-user-role"
 
   assume_role_policy = <<EOF
 {
@@ -195,7 +165,7 @@ resource "aws_iam_role_policy_attachment" "IAMAdmin_RegionalDeny_policy_attachme
 
 #KMSAdmin Role
 resource "aws_iam_role" "KMSAdmin" {
-  name               = "${element(split("-", var.org),0)}-KMSAdmin-user-role"
+  name               = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-KMSAdmin-user-role"
 
   assume_role_policy = <<EOF
 {
@@ -242,7 +212,7 @@ resource "aws_iam_role_policy_attachment" "KMSAdmin_AWSKeyManagementServicePower
 
 #CloudAdmin Role
 resource "aws_iam_role" "CloudAdmin" {
-  name               = "${element(split("-", var.org),0)}-CloudAdmin-user-role"
+  name               = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-CloudAdmin-user-role"
 
   assume_role_policy = <<EOF
 {
@@ -289,7 +259,7 @@ resource "aws_iam_role_policy_attachment" "CloudAdmin_RegionalDeny_policy_attach
 
 #DevopsAdmin
 resource "aws_iam_role" "DevOps" {
-  name               = "${element(split("-", var.org),0)}-DevOps-user-role"
+  name               = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-DevOps-user-role"
 
   assume_role_policy = <<EOF
 {
@@ -358,7 +328,7 @@ resource "aws_iam_role_policy_attachment" "DevOps_KMSReadOnly_policy_attachment"
 
 #DeveloperRole
 resource "aws_iam_role" "Developer" {
-  name               = "${element(split("-", var.org),0)}-Developer-user-role"
+  name               = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-Developer-user-role"
 
   assume_role_policy = <<EOF
 {
@@ -420,7 +390,7 @@ resource "aws_iam_role_policy_attachment" "Developer_RegionalDeny_policy_attachm
 
 #SecurityAdminRole 
 resource "aws_iam_role" "SecurityAdmin" {
-  name               = "${element(split("-", var.org),0)}-SecurityAdmin-user-role"
+  name               = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-SecurityAdmin-user-role"
 
   assume_role_policy = <<EOF
 {
@@ -489,7 +459,7 @@ resource "aws_iam_role_policy_attachment" "SecurityAdmin_AmazonRDSDirectoryServi
 
 #AuditAdminRole 
 resource "aws_iam_role" "AuditAdmin" {
-  name               = "${element(split("-", var.org),0)}-AuditAdmin-user-role"
+  name               = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-AuditAdmin-user-role"
 
   assume_role_policy = <<EOF
 {
@@ -529,7 +499,7 @@ resource "aws_iam_role_policy_attachment" "AuditAdmin_RegionalDeny_policy_attach
 
 #BillingAdmin Role
 resource "aws_iam_role" "BillingAdmin" {
-  name               = "${element(split("-", var.org),0)}-BillingAdmin-user-role"
+  name               = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-BillingAdmin-user-role"
 
   assume_role_policy = <<EOF
 {
@@ -562,7 +532,7 @@ resource "aws_iam_policy_attachment" "BillingAdmin_policy_attachment" {
 
 ## CloudOps role 
 resource "aws_iam_role" "CloudOps" {
-  name               = "${element(split("-", var.org),0)}-CloudOps-user-role"
+  name               = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-CloudOps-user-role"
 
   assume_role_policy = <<EOF
 {
@@ -613,7 +583,7 @@ resource "aws_iam_role_policy_attachment" "CloudOps_KMSReadOnly_policy_attachmen
 
 ## ReadOnly role 
 resource "aws_iam_role" "ReadOnly" {
-  name               = "${element(split("-", var.org),0)}-ReadOnly-user-role"
+  name               = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-ReadOnly-user-role"
 
   assume_role_policy = <<EOF
 {
@@ -641,7 +611,7 @@ resource "aws_iam_role_policy_attachment" "ReadOnly_ViewOnlyAccess_policy_attach
 
 ## Dome9 Service role 
 resource "aws_iam_role" "Dome9" {
-  name               = "${element(split("-", var.org),0)}-Dome9-service-role"
+  name               = "${element(split("-", var.org),0)}-${upper(var.group)}-${upper(var.environment)}-Dome9-service-role"
 
   assume_role_policy = <<EOF
 {
@@ -669,62 +639,6 @@ resource "aws_iam_role_policy_attachment" "Dome9_ViewOnlyAccess_policy_attachmen
     role       = "${aws_iam_role.Dome9.name}" 
     policy_arn = "arn:aws:iam::aws:policy/SecurityAudit"
 }
-
-
-
-## SumoLogic Service role 
-resource "aws_iam_role" "SumoLogic" {
-  name               = "${element(split("-", var.org),0)}-SumoLogic-service-role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "SumoLogic_AWSConfigRole_policy_attachment" {
-    role       = "${aws_iam_role.SumoLogic.name}" 
-    policy_arn = "arn:aws:iam::aws:policy/service-role/AWSConfigRole"
-}
-
-
-## TrendMicro Service role 
-resource "aws_iam_role" "TrendMicro" {
-  name               = "${element(split("-", var.org),0)}-TrendMicro-service-role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "TrendMicro_policy_attachment" {
-    role       = "${aws_iam_role.TrendMicro.name}"
-    policy_arn = "${aws_iam_policy.TrendMicro.arn}"
-}
-
 
 ## developerworkstation Service role 
 resource "aws_iam_role" "developerworkstation" {
@@ -757,162 +671,3 @@ resource "aws_iam_instance_profile" "developerworkstation_instance_profile" {
 }
 
 
-
-## emr Service role 
-resource "aws_iam_role" "emr" {
-  name               = "${element(split("-", var.org),0)}-EMR-service-role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "emr_policy_attachment" {
-    role       = "${aws_iam_role.emr.name}"
-    policy_arn = "${aws_iam_policy.emr.arn}"
-}
-
-resource "aws_iam_instance_profile" "emr_instance_profile" {
-  name   = "${element(split("-", var.org),0)}-EMR-InstanceProfile" 
-  role = "${aws_iam_role.emr.name}"
-}
-
-
-## neo4j Service role 
-resource "aws_iam_role" "neo4j" {
-  name               = "${element(split("-", var.org),0)}-Neo4j-service-role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "neo4j_policy_attachment" {
-    role       = "${aws_iam_role.neo4j.name}"
-    policy_arn = "${aws_iam_policy.neo4j.arn}"
-}
-
-resource "aws_iam_instance_profile" "neo4j_instance_profile" {
-  name   = "${element(split("-", var.org),0)}-Neo4j-InstanceProfile" 
-  role = "${aws_iam_role.neo4j.name}"
-}
-
-
-## rstudio Service role 
-resource "aws_iam_role" "rstudio" {
-  name               = "${element(split("-", var.org),0)}-RStudio-service-role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "rstudio_policy_attachment" {
-    role       = "${aws_iam_role.rstudio.name}"
-    policy_arn = "${aws_iam_policy.rstudio.arn}"
-}
-
-resource "aws_iam_instance_profile" "rstudio_instance_profile" {
-  name   = "${element(split("-", var.org),0)}-RStudio-InstanceProfile" 
-  role = "${aws_iam_role.rstudio.name}"
-}
-
-
-## talend Service role 
-resource "aws_iam_role" "talend" {
-  name               = "${element(split("-", var.org),0)}-Talend-service-role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "talend_policy_attachment" {
-    role       = "${aws_iam_role.talend.name}"
-    policy_arn = "${aws_iam_policy.talend.arn}"
-}
-
-resource "aws_iam_instance_profile" "talend_instance_profile" {
-  name   = "${element(split("-", var.org),0)}-Talend-InstanceProfile" 
-  role = "${aws_iam_role.talend.name}"
-}
-
-
-## tableau Service role 
-resource "aws_iam_role" "tableau" {
-  name               = "${element(split("-", var.org),0)}-Tableau-service-role"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
-      "Effect": "Allow",
-      "Sid": ""
-    }
-  ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "tableau_policy_attachment" {
-    role       = "${aws_iam_role.tableau.name}"
-    policy_arn = "${aws_iam_policy.tableau.arn}"
-}
-
-resource "aws_iam_instance_profile" "tableau_instance_profile" {
-  name   = "${element(split("-", var.org),0)}-Tableau-InstanceProfile" 
-  role = "${aws_iam_role.tableau.name}"
-}
