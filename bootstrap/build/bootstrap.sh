@@ -65,6 +65,7 @@ unset AWS_SECRET_ACCESS_KEY
 
 # get the options
 
+PARAMS=()
 for i in "$@"
 do
 	case $i in
@@ -103,9 +104,11 @@ do
 			show_help
 			exit 0
 			;;
+		*)
+			PARAMS+=($i)
+			;;
 	esac
 done
-
 clear
 
 BANNER "MVC Bootstrap"
@@ -450,6 +453,12 @@ else
 		;;
 		jenkins )
 			jenkins
+		;;
+		splunk )
+			splunk
+		;;
+		cloudtrail )
+			cloudtrail
 		;;
 		* )
 			echo "The component $COMPONENTS is not recognised"
